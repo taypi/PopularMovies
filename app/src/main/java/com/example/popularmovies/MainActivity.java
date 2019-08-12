@@ -1,11 +1,17 @@
 package com.example.popularmovies;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.os.AsyncTask;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -18,6 +24,8 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+    private static final String TOP_RATED_SORT_KEY = "vote_average.desc";
+    private static final String POPULARITY_SORT_KEY = "popularity.desc";
     private TextView mErrorMessageDisplay;
     private RecyclerView mRecyclerView;
     private MovieAdapter mAdapter;
@@ -39,6 +47,29 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         loadMoviesData();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_popular:
+                setSortType(POPULARITY_SORT_KEY);
+                loadMoviesData();
+                return true;
+            case R.id.action_top_rated:
+                setSortType(TOP_RATED_SORT_KEY);
+                loadMoviesData();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     private void showErrorMessage() {
         mRecyclerView.setVisibility(View.INVISIBLE);
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
@@ -46,15 +77,35 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     private void showMoviesData(ArrayList<Movie> movieData) {
         mAdapter.setMovieData(movieData);
+
         mErrorMessageDisplay.setVisibility(View.INVISIBLE);
         mRecyclerView.setVisibility(View.VISIBLE);
     }
 
     private void configureRecyclerView() {
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, getSpanCount()));
         mAdapter = new MovieAdapter();
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    private int getSpanCount() {
+        Point size = new Point();
+        getWindowManager().getDefaultDisplay().getSize(size);
+        int spanCount = size.x/getResources().getInteger(R.integer.screen_size_ratio);
+        return spanCount > 0 ? spanCount : 1;
+    }
+
+    private String getSortType() {
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        return sharedPref.getString(getResources().getString(R.string.sort_type_key), POPULARITY_SORT_KEY);
+    }
+
+    private void setSortType(String sortType) {
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(getResources().getString(R.string.sort_type_key), sortType);
+        editor.apply();
     }
 
     private void loadMoviesData() {
@@ -77,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         @Override
         protected ArrayList<Movie> doInBackground(Void... voids) {
-            URL movieListRequestUrl = NetworkUtils.buildUrl("popularity.desc");
+            URL movieListRequestUrl = NetworkUtils.buildUrl(getSortType());
 
             try {
                 String jsonResponse = NetworkUtils.getResponseFromHttpUrl(movieListRequestUrl);
