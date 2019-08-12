@@ -17,6 +17,7 @@ public class NetworkUtils {
     private final static String SORT_PARAM = "sort_by";
     private final static String VOTE_COUNT_PARAM = "vote_count.gte";
     private final static String API_KEY_PARAM = "api_key";
+    public final static String IMG_PATH = "https://image.tmdb.org/t/p/w342/";
 
     /* The minimum number of votes to include a movie */
     private static final String minVotes = "500";

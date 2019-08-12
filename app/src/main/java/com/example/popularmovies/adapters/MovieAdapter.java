@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.popularmovies.R;
 import com.example.popularmovies.models.Movie;
+import com.example.popularmovies.utils.NetworkUtils;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -41,12 +42,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         Movie movie = mMovieData.get(position);
         viewHolder.mMovieItemTextView.setText(movie.getTitle());
         Picasso.get()
-                .load("https://image.tmdb.org/t/p/" + "/w342/" + movie.getPosterPath())
+                .load(NetworkUtils.IMG_PATH + movie.getPosterPath())
                 .placeholder(R.mipmap.ic_launcher)
                 .into(viewHolder.mPoster, new Callback() {
                     @Override
                     public void onSuccess() {
-
                     }
 
                     @Override
