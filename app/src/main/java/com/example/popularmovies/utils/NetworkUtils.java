@@ -15,7 +15,11 @@ public class NetworkUtils {
 
     private static final String MOVIE_API_URL = "https://api.themoviedb.org/3/discover/movie";
     private final static String SORT_PARAM = "sort_by";
+    private final static String VOTE_COUNT_PARAM = "vote_count.gte";
     private final static String API_KEY_PARAM = "api_key";
+
+    /* The minimum number of votes to include a movie */
+    private static final String minVotes = "500";
 
     /**
      * Builds the URL used to talk to the movie db server.
@@ -26,6 +30,7 @@ public class NetworkUtils {
     public static URL buildUrl(String sortQuery) {
         Uri builtUri = Uri.parse(MOVIE_API_URL).buildUpon()
                 .appendQueryParameter(SORT_PARAM, sortQuery)
+                .appendQueryParameter(VOTE_COUNT_PARAM, minVotes)
                 .appendQueryParameter(API_KEY_PARAM, BuildConfig.ApiKey)
                 .build();
 
