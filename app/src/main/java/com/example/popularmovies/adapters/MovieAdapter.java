@@ -13,18 +13,18 @@ import java.util.ArrayList;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
-    private ArrayList<Movie> mDataset;
+    private ArrayList<Movie> mMovieData;
 
-    public static class MovieViewHolder extends RecyclerView.ViewHolder {
-        public final TextView mMovieItemTextView;
-        public MovieViewHolder(View view) {
-            super(view);
-            mMovieItemTextView = view.findViewById(R.id.list_item_tv);
-        }
+    public MovieAdapter() {
     }
 
-    public MovieAdapter(ArrayList<Movie> myDataset) {
-        mDataset = myDataset;
+    public MovieAdapter(ArrayList<Movie> movieData) {
+        mMovieData = movieData;
+    }
+
+    public void setMovieData(ArrayList<Movie> movieData) {
+        this.mMovieData = movieData;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -37,13 +37,22 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public void onBindViewHolder(MovieViewHolder holder, int position) {
-        holder.mMovieItemTextView.setText(mDataset.get(position).getTitle());
+        holder.mMovieItemTextView.setText(mMovieData.get(position).getTitle());
 
     }
 
     @Override
     public int getItemCount() {
-        return mDataset.size();
+        return mMovieData == null ? 0 : mMovieData.size();
+    }
+
+    public static class MovieViewHolder extends RecyclerView.ViewHolder {
+        public final TextView mMovieItemTextView;
+
+        public MovieViewHolder(View view) {
+            super(view);
+            mMovieItemTextView = view.findViewById(R.id.list_item_tv);
+        }
     }
 
 }
