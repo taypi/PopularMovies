@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Popular Movies</string>
     <string name="error_message">
-        An error has occurred. Please don\'t call me names
+        An error has occurred. \nPlease, don\'t call me names. \nSwipe down to refresh.
     </string>
+    <string name="menu_popular">Most Popular</string>
+    <string name="menu_top_rated">Top Rated</string>
+    <string name="sort_type_key">sortType</string>
 </resources>
