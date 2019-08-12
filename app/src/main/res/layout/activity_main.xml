@@ -22,6 +22,8 @@
         android:padding="16dp"
         android:text="@string/error_message"
         android:textSize="20sp"
+        android:layout_gravity="center"
+        android:gravity="center"
         android:visibility="invisible" />
 
 </FrameLayout>
