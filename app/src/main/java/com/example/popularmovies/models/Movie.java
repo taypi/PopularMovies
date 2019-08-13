@@ -1,6 +1,10 @@
 package com.example.popularmovies.models;
 
-public class Movie {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Movie implements Parcelable {
+    private final static String NOT_AVAILABLE = "Not available";
     private String mTitle;
     private String mPosterPath;
     private String mOverview;
@@ -25,8 +29,31 @@ public class Movie {
         this.mOriginalLanguage = originalLanguage;
     }
 
+    protected Movie(Parcel in) {
+        mTitle = in.readString();
+        mPosterPath = in.readString();
+        mOverview = in.readString();
+        mReleaseDate = in.readString();
+        mId = in.readInt();
+        mBackdropPath = in.readString();
+        mAverageVote = in.readString();
+        mOriginalLanguage = in.readString();
+    }
+
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+
     public String getTitle() {
-        return mTitle;
+        return getFormatted(mTitle);
     }
 
     public void setTitle(String mTitle) {
@@ -34,7 +61,7 @@ public class Movie {
     }
 
     public String getPosterPath() {
-        return mPosterPath;
+        return getFormatted(mPosterPath);
     }
 
     public void setPosterPath(String mPosterPath) {
@@ -42,7 +69,7 @@ public class Movie {
     }
 
     public String getOverview() {
-        return mOverview;
+        return getFormatted(mOverview);
     }
 
     public void setOverview(String mOverview) {
@@ -50,7 +77,7 @@ public class Movie {
     }
 
     public String getReleaseDate() {
-        return mReleaseDate;
+        return getFormatted(mReleaseDate);
     }
 
     public void setReleaseDate(String mReleaseDate) {
@@ -74,7 +101,7 @@ public class Movie {
     }
 
     public String getAverageVote() {
-        return mAverageVote;
+        return getFormatted(mAverageVote);
     }
 
     public void setAverageVote(String mAverageVote) {
@@ -82,11 +109,31 @@ public class Movie {
     }
 
     public String getOriginalLanguage() {
-        return mOriginalLanguage;
+        return getFormatted(mOriginalLanguage);
     }
 
     public void setOriginalLanguage(String mOriginalLanguage) {
         this.mOriginalLanguage = mOriginalLanguage;
     }
 
+    private String getFormatted(String string) {
+        return string == null ? NOT_AVAILABLE : string;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mTitle);
+        dest.writeString(mPosterPath);
+        dest.writeString(mOverview);
+        dest.writeString(mReleaseDate);
+        dest.writeInt(mId);
+        dest.writeString(mBackdropPath);
+        dest.writeString(mAverageVote);
+        dest.writeString(mOriginalLanguage);
+    }
 }
