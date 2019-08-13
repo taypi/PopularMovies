@@ -1,6 +1,5 @@
 package com.example.popularmovies.adapters;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,17 +10,21 @@ import android.widget.TextView;
 
 import com.example.popularmovies.R;
 import com.example.popularmovies.models.Movie;
-import com.example.popularmovies.utils.NetworkUtils;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
+import com.example.popularmovies.utils.ImageUtils;
 
 import java.util.ArrayList;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
     private ArrayList<Movie> mMovieData;
+    private final MovieAdapterOnClickHandler mClickHandler;
 
-    public MovieAdapter() {
+    public MovieAdapter(MovieAdapterOnClickHandler clickHandler) {
+        mClickHandler = clickHandler;
+    }
+
+    public interface MovieAdapterOnClickHandler {
+        void onClick(Movie movie);
     }
 
     public void setMovieData(ArrayList<Movie> movieData) {
@@ -41,19 +44,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     public void onBindViewHolder(MovieViewHolder viewHolder, int position) {
         Movie movie = mMovieData.get(position);
         viewHolder.mMovieItemTextView.setText(movie.getTitle());
-        Picasso.get()
-                .load(NetworkUtils.IMG_PATH + movie.getPosterPath())
-                .placeholder(R.mipmap.ic_launcher)
-                .into(viewHolder.mPoster, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-                        e.printStackTrace();
-                    }
-                });
+        ImageUtils.setImage(viewHolder.mPoster, movie.getPosterPath());
     }
 
     @Override
@@ -61,7 +52,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         return mMovieData == null ? 0 : mMovieData.size();
     }
 
-    public static class MovieViewHolder extends RecyclerView.ViewHolder {
+    public class MovieViewHolder extends RecyclerView.ViewHolder {
         public final TextView mMovieItemTextView;
         public final ImageView mPoster;
 
@@ -69,6 +60,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             super(view);
             mMovieItemTextView = view.findViewById(R.id.tv_list_item);
             mPoster = view.findViewById(R.id.iv_list_item);
+
+            view.setOnClickListener(v -> mClickHandler.onClick(mMovieData.get(getAdapterPosition())));
         }
     }
 
