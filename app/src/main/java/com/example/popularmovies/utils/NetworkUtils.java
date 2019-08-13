@@ -1,3 +1,6 @@
+/**
+ * Created using the udacity exercise as base
+ */
 package com.example.popularmovies.utils;
 
 import android.net.Uri;
