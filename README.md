@@ -16,4 +16,4 @@ To become an Android developer, you must know how to bring particular mobile exp
 
 ## The Movie DB API
 
-To use this app you need to create an api key from [The Movie DBi](https://www.themoviedb.org/documentation/api)
+To use this app you need to create an api key from [The Movie DB](https://www.themoviedb.org/documentation/api)
