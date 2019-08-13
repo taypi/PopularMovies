@@ -1,4 +1,4 @@
-# Sandwich Club Project
+# Popular Movies Project
 
 ## Project Overview
 
