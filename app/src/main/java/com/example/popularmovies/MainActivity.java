@@ -1,12 +1,13 @@
 package com.example.popularmovies;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -23,9 +24,10 @@ import com.example.popularmovies.utils.NetworkUtils;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class MainActivity extends AppCompatActivity {
     private static final String TOP_RATED_SORT_KEY = "vote_average.desc";
     private static final String POPULARITY_SORT_KEY = "popularity.desc";
+    private static final String SORT_TYPE_KEY = "sort_type";
     private TextView mErrorMessageDisplay;
     private RecyclerView mRecyclerView;
     private MovieAdapter mAdapter;
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         mRecyclerView = findViewById(R.id.recycler_view);
         mSwipeRefreshLayout = findViewById(R.id.swipe_refresh);
 
-        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setOnRefreshListener(this::loadMoviesData);
 
         configureRecyclerView();
 
@@ -85,37 +87,35 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private void configureRecyclerView() {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, getSpanCount()));
-        mAdapter = new MovieAdapter();
+        mAdapter = new MovieAdapter(movie -> {
+            Intent intentToStartDetailActivity = new Intent(this, DetailActivity.class);
+            intentToStartDetailActivity.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, movie);
+            startActivity(intentToStartDetailActivity);
+        });
         mRecyclerView.setAdapter(mAdapter);
     }
 
     private int getSpanCount() {
         Point size = new Point();
         getWindowManager().getDefaultDisplay().getSize(size);
-        int spanCount = size.x/getResources().getInteger(R.integer.screen_size_ratio);
+        int spanCount = size.x / getResources().getInteger(R.integer.screen_size_ratio);
         return spanCount > 0 ? spanCount : 1;
     }
 
     private String getSortType() {
         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        return sharedPref.getString(getResources().getString(R.string.sort_type_key), POPULARITY_SORT_KEY);
+        return sharedPref.getString(SORT_TYPE_KEY, POPULARITY_SORT_KEY);
     }
 
     private void setSortType(String sortType) {
         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(getResources().getString(R.string.sort_type_key), sortType);
+        editor.putString(SORT_TYPE_KEY, sortType);
         editor.apply();
     }
 
     private void loadMoviesData() {
         new FetchMoviesTask().execute();
-    }
-
-    @Override
-    public void onRefresh() {
-        FetchMoviesTask retrieveInfo = new FetchMoviesTask();
-        retrieveInfo.execute();
     }
 
     class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>> {
