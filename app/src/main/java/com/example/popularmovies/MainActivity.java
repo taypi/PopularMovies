@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.popularmovies.adapters.MovieAdapter;
-import com.example.popularmovies.database.MovieDatabase;
 import com.example.popularmovies.models.Movie;
 import com.example.popularmovies.viewmodel.MainViewModel;
 import com.example.popularmovies.viewmodel.MainViewModelFactory;
