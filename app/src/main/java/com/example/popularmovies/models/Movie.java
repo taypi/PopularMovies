@@ -3,33 +3,31 @@ package com.example.popularmovies.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Movie implements Parcelable {
     private final static String NOT_AVAILABLE = "Not available";
-    private String mTitle;
-    private String mPosterPath;
-    private String mOverview;
-    private String mReleaseDate;
+    @SerializedName("id")
     private int mId;
+    @SerializedName("title")
+    private String mTitle;
+    @SerializedName("poster_path")
+    private String mPosterPath;
+    @SerializedName("overview")
+    private String mOverview;
+    @SerializedName("release_date")
+    private String mReleaseDate;
+    @SerializedName("backdrop_path")
     private String mBackdropPath;
+    @SerializedName("vote_average")
     private String mAverageVote;
+    @SerializedName("original_language")
     private String mOriginalLanguage;
 
     public Movie() {
     }
 
-    public Movie(String title, String posterPath, String overview, String releaseDate, int id,
-                 String backdropPath, String averageVote, String originalLanguage) {
-        this.mTitle = title;
-        this.mPosterPath = posterPath;
-        this.mOverview = overview;
-        this.mReleaseDate = releaseDate;
-        this.mId = id;
-        this.mBackdropPath = backdropPath;
-        this.mAverageVote = averageVote;
-        this.mOriginalLanguage = originalLanguage;
-    }
-
-    protected Movie(Parcel in) {
+    private Movie(Parcel in) {
         mTitle = in.readString();
         mPosterPath = in.readString();
         mOverview = in.readString();

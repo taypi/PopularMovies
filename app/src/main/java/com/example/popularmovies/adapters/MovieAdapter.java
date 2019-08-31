@@ -12,11 +12,11 @@ import com.example.popularmovies.R;
 import com.example.popularmovies.models.Movie;
 import com.example.popularmovies.utils.ImageUtils;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
-    private ArrayList<Movie> mMovieData;
+    private List<Movie> mMovieData;
     private final MovieAdapterOnClickHandler mClickHandler;
 
     public MovieAdapter(MovieAdapterOnClickHandler clickHandler) {
@@ -27,7 +27,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         void onClick(Movie movie);
     }
 
-    public void setMovieData(ArrayList<Movie> movieData) {
+    public void setMovieData(List<Movie> movieData) {
         mMovieData = movieData;
         notifyDataSetChanged();
     }
