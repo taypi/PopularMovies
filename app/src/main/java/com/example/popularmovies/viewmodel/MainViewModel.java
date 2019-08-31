@@ -1,13 +1,12 @@
 package com.example.popularmovies.viewmodel;
 
-import android.app.Application;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.util.Consumer;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.example.popularmovies.api.RequestHelper;
 import com.example.popularmovies.database.MovieDatabase;
@@ -18,16 +17,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-public class MainViewModel extends AndroidViewModel implements RequestHelper.RequestCallbacks {
-    private final MovieDatabase mDatabase = MovieDatabase.getInstance(getApplication());
+public class MainViewModel extends ViewModel implements RequestHelper.RequestCallbacks {
+    private final MovieDatabase mDatabase;
+    ExecutorService mExecutor = Executors.newSingleThreadExecutor();
     private SortType mCurrentSortType = SortType.POPULAR;
     private MutableLiveData<List<Movie>> mMovies = new MutableLiveData<>();
     private RequestHelper mRequestHelper = new RequestHelper();
     private final Map<SortType, Consumer<Boolean>> functionMap = createMap();
 
-    public MainViewModel(@NonNull Application application) {
-        super(application);
+    public MainViewModel(MovieDatabase database) {
+        mDatabase = database;
         loadMovies();
     }
 
@@ -52,16 +54,27 @@ public class MainViewModel extends AndroidViewModel implements RequestHelper.Req
     }
 
     public void loadMovies() {
-        Objects.requireNonNull(functionMap.get(mCurrentSortType)).accept(true);
+        mExecutor.submit(
+                () -> Objects.requireNonNull(functionMap.get(mCurrentSortType)).accept(true));
+    }
+
+    public void toggleFavorite(Movie movie) {
+        mExecutor.submit(() -> {
+            if (mDatabase.movieDao().getFavoriteById(movie.getId()) != null) {
+                mDatabase.movieDao().deleteFavoriteMovie(movie);
+            } else {
+                mDatabase.movieDao().insertFavoriteMovie(movie);
+            }
+        });
     }
 
     private Map<SortType, Consumer<Boolean>> createMap() {
-        Map<SortType, Consumer<Boolean>> myMap = new HashMap<>();
-        myMap.put(SortType.POPULAR, notUsed -> mRequestHelper.requestPopularMovies(this));
-        myMap.put(SortType.TOP, notUsed -> mRequestHelper.requestTopMovies(this));
-        myMap.put(SortType.FAVORITE,
+        Map<SortType, Consumer<Boolean>> map = new HashMap<>();
+        map.put(SortType.POPULAR, notUsed -> mRequestHelper.requestPopularMovies(this));
+        map.put(SortType.TOP, notUsed -> mRequestHelper.requestTopMovies(this));
+        map.put(SortType.FAVORITE,
                 notUsed -> mMovies.postValue(mDatabase.movieDao().getFavoriteMovies()));
-        return myMap;
+        return map;
     }
 
     public enum SortType {

@@ -3,23 +3,23 @@ package com.example.popularmovies;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
-
-import androidx.lifecycle.ViewModelProviders;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.example.popularmovies.adapters.MovieAdapter;
 import com.example.popularmovies.database.MovieDatabase;
 import com.example.popularmovies.models.Movie;
 import com.example.popularmovies.viewmodel.MainViewModel;
+import com.example.popularmovies.viewmodel.MainViewModelFactory;
 
 import java.util.List;
 
@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     private MovieAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private MainViewModel mMainViewModel;
-    private MovieDatabase mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,14 +39,14 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.recycler_view);
         mSwipeRefreshLayout = findViewById(R.id.swipe_refresh);
 
-        mDatabase = MovieDatabase.getInstance(getApplicationContext());
-
-        mMainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        mMainViewModel.getMovies().observe(this, this::onMoviesChanged);
-        mSwipeRefreshLayout.setOnRefreshListener(this::onRefresh);
-
         configureRecyclerView();
 
+        MainViewModelFactory factory = new MainViewModelFactory(
+                MovieDatabase.getInstance(getApplicationContext()));
+        mMainViewModel = ViewModelProviders.of(this, factory).get(MainViewModel.class);
+        mMainViewModel.getMovies().observe(this, this::onMoviesChanged);
+
+        mSwipeRefreshLayout.setOnRefreshListener(this::onRefresh);
         mSwipeRefreshLayout.setRefreshing(true);
     }
 

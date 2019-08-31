@@ -3,6 +3,7 @@ package com.example.popularmovies;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.widget.Button;
 import android.widget.ImageView;
@@ -12,16 +13,20 @@ import android.widget.Toast;
 import com.example.popularmovies.database.MovieDatabase;
 import com.example.popularmovies.models.Movie;
 import com.example.popularmovies.utils.ImageUtils;
-
-import java.util.List;
+import com.example.popularmovies.viewmodel.MainViewModel;
+import com.example.popularmovies.viewmodel.MainViewModelFactory;
 
 public class DetailActivity extends AppCompatActivity {
-    private MovieDatabase database;
+    private MainViewModel mMainViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        database = MovieDatabase.getInstance(getApplicationContext());
+
+        MainViewModelFactory factory = new MainViewModelFactory(
+                MovieDatabase.getInstance(getApplicationContext()));
+        mMainViewModel = ViewModelProviders.of(this, factory).get(MainViewModel.class);
 
         Intent intent = getIntent();
         if (intent.hasExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE)
@@ -50,14 +55,6 @@ public class DetailActivity extends AppCompatActivity {
         overview.setText(movie.getOverview());
         ImageUtils.setImage(poster, movie.getPosterPath());
 
-        favoriteButton.setOnClickListener(listener -> toggleFavorite(movie));
-    }
-
-    private void toggleFavorite(Movie movie) {
-        if (database.movieDao().getFavoriteById(movie.getId()) != null) {
-            database.movieDao().deleteFavoriteMovie(movie);
-        } else {
-            database.movieDao().insertFavoriteMovie(movie);
-        }
+        favoriteButton.setOnClickListener(listener -> mMainViewModel.toggleFavorite(movie));
     }
 }
