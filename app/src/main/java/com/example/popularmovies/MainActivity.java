@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (getSupportActionBar() != null) getSupportActionBar().setTitle(R.string.menu_popular);
 
         mErrorMessageDisplay = findViewById(R.id.tv_error_message_display);
         mRecyclerView = findViewById(R.id.recycler_view);
@@ -61,12 +62,16 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_popular:
                 mMainViewModel.setCurrentSortType(MainViewModel.SortType.POPULAR);
+                if (getSupportActionBar() != null) getSupportActionBar().setTitle(R.string.menu_popular);
                 return true;
             case R.id.action_top_rated:
                 mMainViewModel.setCurrentSortType(MainViewModel.SortType.TOP);
+                if (getSupportActionBar() != null) getSupportActionBar().setTitle(R.string.menu_top_rated);
                 return true;
             case R.id.action_favorite:
                 mMainViewModel.setCurrentSortType(MainViewModel.SortType.FAVORITE);
+                if (getSupportActionBar() != null) getSupportActionBar().setTitle(R.string.menu_favorite);
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

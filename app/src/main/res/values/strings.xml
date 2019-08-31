@@ -6,7 +6,6 @@
     <string name="menu_popular">Most Popular</string>
     <string name="menu_top_rated">Top Rated</string>
     <string name="menu_favorite">Favorites</string>
-    <string name="menu_discover">Discover</string>
     <string name="overview">Overview</string>
     <string name="release_date">Release date: %1$s</string>
     <string name="user_score">User score: %1$s</string>
