@@ -1,5 +1,6 @@
 package com.example.popularmovies.database;
 
+import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -10,6 +11,7 @@ import com.example.popularmovies.models.Movie;
 
 import java.util.List;
 
+@Dao
 public interface MovieDao {
 
     @Query("SELECT * FROM favorite_movie ORDER BY mAverageVote")
