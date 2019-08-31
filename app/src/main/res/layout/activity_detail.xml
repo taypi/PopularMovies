@@ -107,5 +107,18 @@
             app:layout_constraintTop_toBottomOf="@+id/overview"
             app:layout_constrainedWidth="true" />
 
+        <Button
+            android:id="@+id/btn_favorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="Favorite"
+            app:layout_constraintBottom_toTopOf="@+id/guideline_horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline_vertical"
+            app:layout_constraintTop_toBottomOf="@+id/tv_detail_language" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

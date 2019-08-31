@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.example.popularmovies.adapters.MovieAdapter;
 import com.example.popularmovies.api.MovieApiService;
+import com.example.popularmovies.database.MovieDatabase;
 import com.example.popularmovies.models.Movie;
 import com.example.popularmovies.models.MovieList;
 
@@ -32,11 +33,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
     private static final String TOP_RATED_SORT_KEY = "vote_average.desc";
     private static final String POPULARITY_SORT_KEY = "popularity.desc";
+    private static final String FAVORITE = "favorite";
     private static final String SORT_TYPE_KEY = "sort_type";
     private TextView mErrorMessageDisplay;
     private RecyclerView mRecyclerView;
     private MovieAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+
+    private MovieDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
         mSwipeRefreshLayout = findViewById(R.id.swipe_refresh);
 
         mSwipeRefreshLayout.setOnRefreshListener(this::loadMoviesData);
+
+        database = MovieDatabase.getInstance(getApplicationContext());
 
         configureRecyclerView();
 
@@ -70,6 +76,10 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.action_top_rated:
                 setSortType(TOP_RATED_SORT_KEY);
+                loadMoviesData();
+                return true;
+            case R.id.action_favorite:
+                setSortType(FAVORITE);
                 loadMoviesData();
                 return true;
             default:
@@ -126,25 +136,29 @@ public class MainActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        MovieApiService service = retrofit.create(MovieApiService.class);
-        Call<MovieList> call = getSortType().equals(TOP_RATED_SORT_KEY) ?
-                service.getTopRatedMovies(BuildConfig.ApiKey) :
-                service.getPopularMovies(BuildConfig.ApiKey);
-        call.enqueue(new Callback<MovieList>() {
-            @Override
-            public void onResponse(Call<MovieList> call, Response<MovieList> response) {
-                mSwipeRefreshLayout.setRefreshing(false);
-                if (response.body() != null) {
-                    showMoviesData(response.body().getMovieList());
+        if (getSortType().equals(FAVORITE)) {
+            showMoviesData(database.movieDao().getFavoriteMovies());
+        } else {
+            MovieApiService service = retrofit.create(MovieApiService.class);
+            Call<MovieList> call = getSortType().equals(TOP_RATED_SORT_KEY) ?
+                    service.getTopRatedMovies(BuildConfig.ApiKey) :
+                    service.getPopularMovies(BuildConfig.ApiKey);
+            call.enqueue(new Callback<MovieList>() {
+                @Override
+                public void onResponse(Call<MovieList> call, Response<MovieList> response) {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                    if (response.body() != null) {
+                        showMoviesData(response.body().getMovieList());
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<MovieList> call, Throwable t) {
-                Log.e("ERROR", "NET_ERROR:" + t.toString());
-                mSwipeRefreshLayout.setRefreshing(false);
-                showErrorMessage();
-            }
-        });
+                @Override
+                public void onFailure(Call<MovieList> call, Throwable t) {
+                    Log.e("ERROR", "NET_ERROR:" + t.toString());
+                    mSwipeRefreshLayout.setRefreshing(false);
+                    showErrorMessage();
+                }
+            });
+        }
     }
 }
