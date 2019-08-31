@@ -14,7 +14,7 @@ import java.util.List;
 @Dao
 public interface MovieDao {
 
-    @Query("SELECT * FROM favorite_movie ORDER BY mAverageVote DESC")
+    @Query("SELECT * FROM favorite_movie ORDER BY averageVote DESC")
     List<Movie> getFavoriteMovies();
 
     @Insert
@@ -25,4 +25,7 @@ public interface MovieDao {
 
     @Delete
     void deleteFavoriteMovie(Movie movie);
+
+    @Query("SELECT * FROM favorite_movie WHERE id = :id")
+    Movie getFavoriteById(int id);
 }

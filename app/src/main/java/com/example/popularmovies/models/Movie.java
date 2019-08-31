@@ -14,113 +14,108 @@ public class Movie implements Parcelable {
     private final static String NOT_AVAILABLE = "Not available";
     @SerializedName("id")
     @PrimaryKey
-    private int mId;
+    private int id;
     @SerializedName("title")
-    private String mTitle;
+    private String title;
     @SerializedName("poster_path")
-    private String mPosterPath;
+    private String posterPath;
     @SerializedName("overview")
-    private String mOverview;
+    private String overview;
     @SerializedName("release_date")
-    private String mReleaseDate;
+    private String releaseDate;
     @SerializedName("backdrop_path")
-    private String mBackdropPath;
+    private String backdropPath;
     @SerializedName("vote_average")
-    private String mAverageVote;
+    private String averageVote;
     @SerializedName("original_language")
-    private String mOriginalLanguage;
+    private String originalLanguage;
 
     public Movie(int id, String title, String posterPath, String overview, String releaseDate,
                  String backdropPath, String averageVote, String originalLanguage) {
-        this.mId = id;
-        this.mTitle = title;
-        this.mPosterPath = posterPath;
-        this.mOverview = overview;
-        this.mReleaseDate = releaseDate;
-        this.mBackdropPath = backdropPath;
-        this.mAverageVote = averageVote;
-        this.mOriginalLanguage = originalLanguage;
+        this.id = id;
+        this.title = title;
+        this.posterPath = posterPath;
+        this.overview = overview;
+        this.releaseDate = releaseDate;
+        this.backdropPath = backdropPath;
+        this.averageVote = averageVote;
+        this.originalLanguage = originalLanguage;
     }
 
     @Ignore
     private Movie(Parcel in) {
-        mTitle = in.readString();
-        mPosterPath = in.readString();
-        mOverview = in.readString();
-        mReleaseDate = in.readString();
-        mId = in.readInt();
-        mBackdropPath = in.readString();
-        mAverageVote = in.readString();
-        mOriginalLanguage = in.readString();
+        title = in.readString();
+        posterPath = in.readString();
+        overview = in.readString();
+        releaseDate = in.readString();
+        id = in.readInt();
+        backdropPath = in.readString();
+        averageVote = in.readString();
+        originalLanguage = in.readString();
     }
 
     public String getTitle() {
-        return getFormatted(mTitle);
+        return getFormatted(title);
     }
 
     public void setTitle(String mTitle) {
-        this.mTitle = mTitle;
+        this.title = mTitle;
     }
 
     public String getPosterPath() {
-        return getFormatted(mPosterPath);
+        return getFormatted(posterPath);
     }
 
     public void setPosterPath(String mPosterPath) {
-        this.mPosterPath = mPosterPath;
+        this.posterPath = mPosterPath;
     }
 
     public String getOverview() {
-        return getFormatted(mOverview);
+        return getFormatted(overview);
     }
 
     public void setOverview(String mOverview) {
-        this.mOverview = mOverview;
+        this.overview = mOverview;
     }
 
     public String getReleaseDate() {
-        return getFormatted(mReleaseDate);
+        return getFormatted(releaseDate);
     }
 
     public void setReleaseDate(String mReleaseDate) {
-        this.mReleaseDate = mReleaseDate;
+        this.releaseDate = mReleaseDate;
     }
 
     public int getId() {
-        return mId;
+        return id;
     }
 
     public void setId(int mId) {
-        this.mId = mId;
+        this.id = mId;
     }
 
     public String getBackdropPath() {
-        return mBackdropPath;
+        return backdropPath;
     }
 
     public void setBackdropPath(String mBackdropPath) {
-        this.mBackdropPath = mBackdropPath;
+        this.backdropPath = mBackdropPath;
     }
 
     public String getAverageVote() {
-        return getFormatted(mAverageVote);
+        return getFormatted(averageVote);
     }
 
     public void setAverageVote(String mAverageVote) {
-        this.mAverageVote = mAverageVote;
+        this.averageVote = mAverageVote;
     }
 
     public String getOriginalLanguage() {
-        return getFormatted(mOriginalLanguage);
+        return getFormatted(originalLanguage);
     }
 
     public void setOriginalLanguage(String mOriginalLanguage) {
-        this.mOriginalLanguage = mOriginalLanguage;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof Movie && ((Movie) obj).getId() == mId;
+        this.originalLanguage = mOriginalLanguage;
     }
 
     // Parcelable stuff
@@ -147,13 +142,13 @@ public class Movie implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mTitle);
-        dest.writeString(mPosterPath);
-        dest.writeString(mOverview);
-        dest.writeString(mReleaseDate);
-        dest.writeInt(mId);
-        dest.writeString(mBackdropPath);
-        dest.writeString(mAverageVote);
-        dest.writeString(mOriginalLanguage);
+        dest.writeString(title);
+        dest.writeString(posterPath);
+        dest.writeString(overview);
+        dest.writeString(releaseDate);
+        dest.writeInt(id);
+        dest.writeString(backdropPath);
+        dest.writeString(averageVote);
+        dest.writeString(originalLanguage);
     }
 }

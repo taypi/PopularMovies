@@ -54,8 +54,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void toggleFavorite(Movie movie) {
-        List<Movie> movies = database.movieDao().getFavoriteMovies();
-        if (movies.contains(movie)) {
+        if (database.movieDao().getFavoriteById(movie.getId()) != null) {
             database.movieDao().deleteFavoriteMovie(movie);
         } else {
             database.movieDao().insertFavoriteMovie(movie);
