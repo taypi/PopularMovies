@@ -13,6 +13,8 @@ import com.example.popularmovies.database.MovieDatabase;
 import com.example.popularmovies.models.Movie;
 import com.example.popularmovies.utils.ImageUtils;
 
+import java.util.List;
+
 public class DetailActivity extends AppCompatActivity {
     private MovieDatabase database;
     @Override
@@ -48,6 +50,15 @@ public class DetailActivity extends AppCompatActivity {
         overview.setText(movie.getOverview());
         ImageUtils.setImage(poster, movie.getPosterPath());
 
-        favoriteButton.setOnClickListener(listener -> database.movieDao().insertFavoriteMovie(movie));
+        favoriteButton.setOnClickListener(listener -> toggleFavorite(movie));
+    }
+
+    private void toggleFavorite(Movie movie) {
+        List<Movie> movies = database.movieDao().getFavoriteMovies();
+        if (movies.contains(movie)) {
+            database.movieDao().deleteFavoriteMovie(movie);
+        } else {
+            database.movieDao().insertFavoriteMovie(movie);
+        }
     }
 }

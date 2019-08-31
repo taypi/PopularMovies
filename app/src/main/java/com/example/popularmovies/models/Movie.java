@@ -54,18 +54,6 @@ public class Movie implements Parcelable {
         mOriginalLanguage = in.readString();
     }
 
-    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
-        @Override
-        public Movie createFromParcel(Parcel in) {
-            return new Movie(in);
-        }
-
-        @Override
-        public Movie[] newArray(int size) {
-            return new Movie[size];
-        }
-    };
-
     public String getTitle() {
         return getFormatted(mTitle);
     }
@@ -129,6 +117,24 @@ public class Movie implements Parcelable {
     public void setOriginalLanguage(String mOriginalLanguage) {
         this.mOriginalLanguage = mOriginalLanguage;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Movie && ((Movie) obj).getId() == mId;
+    }
+
+    // Parcelable stuff
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 
     private String getFormatted(String string) {
         return string == null ? NOT_AVAILABLE : string;
