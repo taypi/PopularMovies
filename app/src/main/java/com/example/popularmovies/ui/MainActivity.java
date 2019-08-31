@@ -1,4 +1,4 @@
-package com.example.popularmovies;
+package com.example.popularmovies.ui;
 
 import android.content.Intent;
 import android.graphics.Point;
@@ -15,7 +15,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.popularmovies.adapters.MovieAdapter;
+import com.example.popularmovies.R;
+import com.example.popularmovies.ui.adapters.MovieAdapter;
 import com.example.popularmovies.models.Movie;
 import com.example.popularmovies.viewmodel.MainViewModel;
 import com.example.popularmovies.viewmodel.MainViewModelFactory;

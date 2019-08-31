@@ -1,9 +1,10 @@
-package com.example.popularmovies;
+package com.example.popularmovies.ui;
 
 import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import com.example.popularmovies.BuildConfig;
 import com.example.popularmovies.api.MovieApiService;
 import com.example.popularmovies.database.MovieDatabase;
 import com.example.popularmovies.models.Movie;
@@ -23,7 +24,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Repository {
     private static final String BASE_URL = "https://api.themoviedb.org/3/";
-    ExecutorService mExecutor = Executors.newSingleThreadExecutor();
+    private ExecutorService mExecutor = Executors.newSingleThreadExecutor();
     private MovieApiService mService;
     private MovieDatabase mDatabase;
 

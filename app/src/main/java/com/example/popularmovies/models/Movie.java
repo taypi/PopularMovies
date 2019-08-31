@@ -11,6 +11,18 @@ import com.google.gson.annotations.SerializedName;
 
 @Entity(tableName = "favorite_movie")
 public class Movie implements Parcelable {
+    // Parcelable stuff
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
     private final static String NOT_AVAILABLE = "Not available";
     @SerializedName("id")
     @PrimaryKey
@@ -27,11 +39,22 @@ public class Movie implements Parcelable {
     private String backdropPath;
     @SerializedName("vote_average")
     private String averageVote;
+    @SerializedName("vote_count")
+    private String voteCount;
     @SerializedName("original_language")
     private String originalLanguage;
+    @SerializedName("runtime")
+    private String runtime;
+    @Ignore
+    @SerializedName("videos")
+    private VideoList videos;
+    @Ignore
+    @SerializedName("reviews")
+    private ReviewList reviews;
 
     public Movie(int id, String title, String posterPath, String overview, String releaseDate,
-                 String backdropPath, String averageVote, String originalLanguage) {
+            String backdropPath, String averageVote, String voteCount, String originalLanguage,
+            String runtime) {
         this.id = id;
         this.title = title;
         this.posterPath = posterPath;
@@ -39,7 +62,9 @@ public class Movie implements Parcelable {
         this.releaseDate = releaseDate;
         this.backdropPath = backdropPath;
         this.averageVote = averageVote;
+        this.voteCount = voteCount;
         this.originalLanguage = originalLanguage;
+        this.runtime = runtime;
     }
 
     @Ignore
@@ -118,18 +143,37 @@ public class Movie implements Parcelable {
         this.originalLanguage = mOriginalLanguage;
     }
 
-    // Parcelable stuff
-    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
-        @Override
-        public Movie createFromParcel(Parcel in) {
-            return new Movie(in);
-        }
+    public String getVoteCount() {
+        return voteCount;
+    }
 
-        @Override
-        public Movie[] newArray(int size) {
-            return new Movie[size];
-        }
-    };
+    public void setVoteCount(String voteCount) {
+        this.voteCount = voteCount;
+    }
+
+    public String getRuntime() {
+        return runtime;
+    }
+
+    public void setRuntime(String runtime) {
+        this.runtime = runtime;
+    }
+
+    public VideoList getVideos() {
+        return videos;
+    }
+
+    public void setVideos(VideoList videos) {
+        this.videos = videos;
+    }
+
+    public ReviewList getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(ReviewList reviews) {
+        this.reviews = reviews;
+    }
 
     private String getFormatted(String string) {
         return string == null ? NOT_AVAILABLE : string;
