@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.popularmovies.database.MovieDatabase;
 import com.example.popularmovies.models.Movie;
 import com.example.popularmovies.utils.ImageUtils;
 import com.example.popularmovies.viewmodel.MainViewModel;
@@ -24,8 +23,7 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        MainViewModelFactory factory = new MainViewModelFactory(
-                MovieDatabase.getInstance(getApplicationContext()));
+        MainViewModelFactory factory = new MainViewModelFactory(new Repository(this));
         mMainViewModel = ViewModelProviders.of(this, factory).get(MainViewModel.class);
 
         Intent intent = getIntent();
@@ -55,6 +53,6 @@ public class DetailActivity extends AppCompatActivity {
         overview.setText(movie.getOverview());
         ImageUtils.setImage(poster, movie.getPosterPath());
 
-        favoriteButton.setOnClickListener(listener -> mMainViewModel.toggleFavorite(movie));
+        favoriteButton.setOnClickListener(listener -> mMainViewModel.toggleFavoriteStatus(movie));
     }
 }
