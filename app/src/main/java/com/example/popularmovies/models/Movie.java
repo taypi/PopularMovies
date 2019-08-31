@@ -3,11 +3,17 @@ package com.example.popularmovies.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 
+@Entity(tableName = "favorite_movie")
 public class Movie implements Parcelable {
     private final static String NOT_AVAILABLE = "Not available";
     @SerializedName("id")
+    @PrimaryKey
     private int mId;
     @SerializedName("title")
     private String mTitle;
@@ -24,9 +30,19 @@ public class Movie implements Parcelable {
     @SerializedName("original_language")
     private String mOriginalLanguage;
 
-    public Movie() {
+    public Movie(int id, String title, String posterPath, String overview, String releaseDate,
+                 String backdropPath, String averageVote, String originalLanguage) {
+        this.mId = id;
+        this.mTitle = title;
+        this.mPosterPath = posterPath;
+        this.mOverview = overview;
+        this.mReleaseDate = releaseDate;
+        this.mBackdropPath = backdropPath;
+        this.mAverageVote = averageVote;
+        this.mOriginalLanguage = originalLanguage;
     }
 
+    @Ignore
     private Movie(Parcel in) {
         mTitle = in.readString();
         mPosterPath = in.readString();
