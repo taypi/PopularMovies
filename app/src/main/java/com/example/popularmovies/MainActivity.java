@@ -1,15 +1,15 @@
 package com.example.popularmovies;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
+
+import androidx.lifecycle.ViewModelProviders;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.util.Log;
+
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,30 +17,19 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.popularmovies.adapters.MovieAdapter;
-import com.example.popularmovies.api.MovieApiService;
 import com.example.popularmovies.database.MovieDatabase;
 import com.example.popularmovies.models.Movie;
-import com.example.popularmovies.models.MovieList;
+import com.example.popularmovies.viewmodel.MainViewModel;
 
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
 public class MainActivity extends AppCompatActivity {
-    private static final String TOP_RATED_SORT_KEY = "vote_average.desc";
-    private static final String POPULARITY_SORT_KEY = "popularity.desc";
-    private static final String FAVORITE = "favorite";
-    private static final String SORT_TYPE_KEY = "sort_type";
     private TextView mErrorMessageDisplay;
     private RecyclerView mRecyclerView;
     private MovieAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-
-    private MovieDatabase database;
+    private MainViewModel mMainViewModel;
+    private MovieDatabase mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,13 +40,15 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.recycler_view);
         mSwipeRefreshLayout = findViewById(R.id.swipe_refresh);
 
-        mSwipeRefreshLayout.setOnRefreshListener(this::loadMoviesData);
+        mDatabase = MovieDatabase.getInstance(getApplicationContext());
 
-        database = MovieDatabase.getInstance(getApplicationContext());
+        mMainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        mMainViewModel.getMovies().observe(this, this::onMoviesChanged);
+        mSwipeRefreshLayout.setOnRefreshListener(this::onRefresh);
 
         configureRecyclerView();
 
-        loadMoviesData();
+        mSwipeRefreshLayout.setRefreshing(true);
     }
 
     @Override
@@ -69,22 +60,34 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        mSwipeRefreshLayout.setRefreshing(true);
         switch (item.getItemId()) {
             case R.id.action_popular:
-                setSortType(POPULARITY_SORT_KEY);
-                loadMoviesData();
+                mMainViewModel.setCurrentSortType(MainViewModel.SortType.POPULAR);
                 return true;
             case R.id.action_top_rated:
-                setSortType(TOP_RATED_SORT_KEY);
-                loadMoviesData();
+                mMainViewModel.setCurrentSortType(MainViewModel.SortType.TOP);
                 return true;
             case R.id.action_favorite:
-                setSortType(FAVORITE);
-                loadMoviesData();
+                mMainViewModel.setCurrentSortType(MainViewModel.SortType.FAVORITE);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void onMoviesChanged(List<Movie> movies) {
+        mSwipeRefreshLayout.setRefreshing(false);
+        if (movies.isEmpty()) {
+            showErrorMessage();
+        } else {
+            showMoviesData(movies);
+        }
+    }
+
+    private void onRefresh() {
+        mSwipeRefreshLayout.setRefreshing(true);
+        mMainViewModel.loadMovies();
     }
 
     private void showErrorMessage() {
@@ -115,50 +118,5 @@ public class MainActivity extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getSize(size);
         int spanCount = size.x / getResources().getInteger(R.integer.screen_size_ratio);
         return spanCount > 0 ? spanCount : 1;
-    }
-
-    private String getSortType() {
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        return sharedPref.getString(SORT_TYPE_KEY, POPULARITY_SORT_KEY);
-    }
-
-    private void setSortType(String sortType) {
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(SORT_TYPE_KEY, sortType);
-        editor.apply();
-    }
-
-    private void loadMoviesData() {
-        mSwipeRefreshLayout.setRefreshing(true);
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.themoviedb.org/3/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        if (getSortType().equals(FAVORITE)) {
-            showMoviesData(database.movieDao().getFavoriteMovies());
-        } else {
-            MovieApiService service = retrofit.create(MovieApiService.class);
-            Call<MovieList> call = getSortType().equals(TOP_RATED_SORT_KEY) ?
-                    service.getTopRatedMovies(BuildConfig.ApiKey) :
-                    service.getPopularMovies(BuildConfig.ApiKey);
-            call.enqueue(new Callback<MovieList>() {
-                @Override
-                public void onResponse(Call<MovieList> call, Response<MovieList> response) {
-                    mSwipeRefreshLayout.setRefreshing(false);
-                    if (response.body() != null) {
-                        showMoviesData(response.body().getMovieList());
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<MovieList> call, Throwable t) {
-                    Log.e("ERROR", "NET_ERROR:" + t.toString());
-                    mSwipeRefreshLayout.setRefreshing(false);
-                    showErrorMessage();
-                }
-            });
-        }
     }
 }
