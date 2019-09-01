@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         configureRecyclerView();
 
-        MainViewModelFactory factory = new MainViewModelFactory(new Repository(this));
+        MainViewModelFactory factory = new MainViewModelFactory(Repository.getInstance(this));
         mMainViewModel = ViewModelProviders.of(this, factory).get(MainViewModel.class);
         mMainViewModel.getMovies().observe(this, this::onMoviesChanged);
 

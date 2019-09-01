@@ -47,7 +47,7 @@ public class Movie implements Parcelable {
     private String runtime;
     @Ignore
     @SerializedName("videos")
-    private VideoList videos;
+    private TrailerList trailers;
     @Ignore
     @SerializedName("reviews")
     private ReviewList reviews;
@@ -65,6 +65,24 @@ public class Movie implements Parcelable {
         this.voteCount = voteCount;
         this.originalLanguage = originalLanguage;
         this.runtime = runtime;
+    }
+
+    @Ignore
+    public Movie(int id, String title, String posterPath, String overview, String releaseDate,
+            String backdropPath, String averageVote, String voteCount, String originalLanguage,
+            String runtime, TrailerList trailerList, ReviewList reviewList) {
+        this.id = id;
+        this.title = title;
+        this.posterPath = posterPath;
+        this.overview = overview;
+        this.releaseDate = releaseDate;
+        this.backdropPath = backdropPath;
+        this.averageVote = averageVote;
+        this.voteCount = voteCount;
+        this.originalLanguage = originalLanguage;
+        this.runtime = runtime;
+        this.trailers = trailerList;
+        this.reviews = reviewList;
     }
 
     @Ignore
@@ -159,12 +177,12 @@ public class Movie implements Parcelable {
         this.runtime = runtime;
     }
 
-    public VideoList getVideos() {
-        return videos;
+    public TrailerList getTrailers() {
+        return trailers;
     }
 
-    public void setVideos(VideoList videos) {
-        this.videos = videos;
+    public void setTrailers(TrailerList trailers) {
+        this.trailers = trailers;
     }
 
     public ReviewList getReviews() {

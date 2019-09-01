@@ -1,7 +1,5 @@
 package com.example.popularmovies.api;
 
-import androidx.lifecycle.LiveData;
-
 import com.example.popularmovies.models.Movie;
 import com.example.popularmovies.models.MovieList;
 
@@ -17,6 +15,9 @@ public interface MovieApiService {
     @GET("movie/top_rated")
     Call<MovieList> getTopRatedMovies(@Query("api_key") String apiKey);
 
-    @GET("movie/{id}?append_to_response=videos,credits,reviews")
-    LiveData<Movie> getMovieDetails(@Path("id") long id, @Query("api_key") String apiKey);
+    @GET("movie/{id}")
+    Call<Movie> getMovieDetails(
+            @Path("id") long id,
+            @Query("api_key") String apiKey,
+            @Query("append_to_response") String details);
 }

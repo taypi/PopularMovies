@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class MainViewModel extends ViewModel implements Repository.RequestCallbacks {
+public class MainViewModel extends ViewModel implements Repository.ListRequestCallbacks {
     private SortType mCurrentSortType = SortType.POPULAR;
     private MutableLiveData<List<Movie>> mMovies = new MutableLiveData<>();
     private Repository mRepository;
@@ -50,11 +50,6 @@ public class MainViewModel extends ViewModel implements Repository.RequestCallba
 
     public void loadMovies() {
         Objects.requireNonNull(functionMap.get(mCurrentSortType)).accept(true);
-    }
-
-    public void toggleFavoriteStatus(Movie movie) {
-        mRepository.toggleFavoriteStatus(movie);
-        loadMovies();
     }
 
     public enum SortType {

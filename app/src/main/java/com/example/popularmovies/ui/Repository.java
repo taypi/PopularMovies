@@ -27,8 +27,9 @@ public class Repository {
     private ExecutorService mExecutor = Executors.newSingleThreadExecutor();
     private MovieApiService mService;
     private MovieDatabase mDatabase;
+    private static Repository sInstance;
 
-    public Repository(@NonNull Context context) {
+    private Repository(@NonNull Context context) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -38,17 +39,24 @@ public class Repository {
         mDatabase = MovieDatabase.getInstance(context);
     }
 
-    public void requestTopMovies(@NonNull RequestCallbacks callbacks) {
+    synchronized public static Repository getInstance(Context context) {
+        if (sInstance == null) {
+            sInstance = new Repository(context);
+        }
+        return sInstance;
+    }
+
+    public void requestTopMovies(@NonNull ListRequestCallbacks callbacks) {
         mExecutor.submit(() -> {
             Call<MovieList> call = mService.getTopRatedMovies(BuildConfig.ApiKey);
-            enqueueCall(call, callbacks);
+            enqueueListCall(call, callbacks);
         });
     }
 
-    public void requestPopularMovies(@NonNull RequestCallbacks callbacks) {
+    public void requestPopularMovies(@NonNull ListRequestCallbacks callbacks) {
         mExecutor.submit(() -> {
             Call<MovieList> call = mService.getPopularMovies(BuildConfig.ApiKey);
-            enqueueCall(call, callbacks);
+            enqueueListCall(call, callbacks);
         });
     }
 
@@ -62,6 +70,13 @@ public class Repository {
         return movies;
     }
 
+    public void requestMovieDetails(long id, @NonNull RequestCallbacks callbacks) {
+        mExecutor.submit(() -> {
+            Call<Movie> call = mService.getMovieDetails(id, BuildConfig.ApiKey, "reviews,videos");
+            enqueueCall(call, callbacks);
+        });
+    }
+
     public void toggleFavoriteStatus(@NonNull Movie movie) {
         mExecutor.submit(() -> {
             if (mDatabase.movieDao().getFavoriteById(movie.getId()) != null) {
@@ -72,7 +87,7 @@ public class Repository {
         });
     }
 
-    private void enqueueCall(Call<MovieList> call, @NonNull RequestCallbacks callbacks) {
+    private void enqueueListCall(Call<MovieList> call, @NonNull ListRequestCallbacks callbacks) {
         call.enqueue(new Callback<MovieList>() {
             @Override
             public void onResponse(Call<MovieList> call, Response<MovieList> response) {
@@ -88,8 +103,30 @@ public class Repository {
         });
     }
 
-    public interface RequestCallbacks {
+    private void enqueueCall(Call<Movie> call, @NonNull RequestCallbacks callbacks) {
+        call.enqueue(new Callback<Movie>() {
+            @Override
+            public void onResponse(Call<Movie> call, Response<Movie> response) {
+                if (response.body() != null) {
+                    callbacks.onSuccess(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Movie> call, Throwable t) {
+                callbacks.onError(t);
+            }
+        });
+    }
+
+    public interface ListRequestCallbacks {
         void onSuccess(List<Movie> movies);
+
+        void onError(@NonNull Throwable throwable);
+    }
+
+    public interface RequestCallbacks {
+        void onSuccess(Movie movies);
 
         void onError(@NonNull Throwable throwable);
     }
