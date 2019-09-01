@@ -21,7 +21,8 @@ import com.example.popularmovies.utils.ApiUtils;
 import com.example.popularmovies.utils.ImageUtils;
 import com.example.popularmovies.viewmodel.DetailViewModel;
 import com.example.popularmovies.viewmodel.DetailViewModelFactory;
-import com.example.popularmovies.viewmodel.MainViewModel;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 public class DetailActivity extends AppCompatActivity {
     private Movie mMovie;
@@ -71,7 +72,8 @@ public class DetailActivity extends AppCompatActivity {
                 ShareCompat.IntentBuilder.from(this)
                         .setType("text/plain")
                         .setChooserTitle("Share movie")
-                        .setText(getString(R.string.share_message, ApiUtils.SHARE_URL, mMovie.getId()))
+                        .setText(getString(R.string.share_message, ApiUtils.SHARE_URL,
+                                mMovie.getId()))
                         .startChooser();
                 return true;
             case R.id.action_favorite:
@@ -87,6 +89,31 @@ public class DetailActivity extends AppCompatActivity {
         item.setIcon(getDrawable(mDetailViewModel.getFavoriteIcon(mMovie)));
     }
 
+    private void setToolbarText() {
+        // Code snippet from https://stackoverflow/com/questions/31662416/show-collapsingtoolbarlayout-title-only-when-collapsed
+        final CollapsingToolbarLayout collapsingToolbarLayout = findViewById(
+                R.id.collapsing_toolbar_layout);
+        AppBarLayout appBarLayout = findViewById(R.id.bar_layout);
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = true;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    collapsingToolbarLayout.setTitle(mMovie.getTitle());
+                    isShow = true;
+                } else if (isShow) {
+                    collapsingToolbarLayout.setTitle(" ");
+                    isShow = false;
+                }
+            }
+        });
+    }
+
     private void setUi(Movie movie) {
         mMovie = movie;
         ImageView poster = findViewById(R.id.iv_movie_collapse);
@@ -94,6 +121,7 @@ public class DetailActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(movie.getTitle());
         setSupportActionBar(toolbar);
+        setToolbarText();
 //        TextView movieTitle = findViewById(R.id.tv_detail_title);
 //        TextView releaseDate = findViewById(R.id.tv_detail_release);
 //        TextView language = findViewById(R.id.tv_detail_language);
@@ -107,11 +135,13 @@ public class DetailActivity extends AppCompatActivity {
 //                getResources().getString(R.string.release_date, movie.getReleaseDate()));
 //        score.setText(getResources().getString(R.string.user_score, movie.getAverageVote()));
 //        language.setText(
-//                getResources().getString(R.string.original_language, movie.getOriginalLanguage()));
+//                getResources().getString(R.string.original_language, movie.getOriginalLanguage
+//                ()));
 //        overview.setText(movie.getOverview());
 //        ImageUtils.setPoster(poster, movie.getPosterPath());
 //
-//        favoriteButton.setOnClickListener(listener -> mDetailViewModel.toggleFavoriteStatus(movie));
+//        favoriteButton.setOnClickListener(listener -> mDetailViewModel.toggleFavoriteStatus
+//        (movie));
 //
 //        mDetailViewModel.loadMovieDetails(movie.getId());
     }
@@ -131,7 +161,8 @@ public class DetailActivity extends AppCompatActivity {
 //        recyclerView.setLayoutManager(
 //                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 //        mTrailerAdapter = new TrailerAdapter(trailer -> {
-//            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=" + trailer.getKey()));
+//            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube
+//            .com/watch?v=" + trailer.getKey()));
 //            if (intent.resolveActivity(getApplicationContext().getPackageManager()) != null) {
 //                startActivity(intent);
 //            }
