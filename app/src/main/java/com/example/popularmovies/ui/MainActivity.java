@@ -61,15 +61,15 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         mSwipeRefreshLayout.setRefreshing(true);
         switch (item.getItemId()) {
-            case R.id.action_popular:
+            case R.id.action_sort_popular:
                 mMainViewModel.setCurrentSortType(MainViewModel.SortType.POPULAR);
                 if (getSupportActionBar() != null) getSupportActionBar().setTitle(R.string.menu_popular);
                 return true;
-            case R.id.action_top_rated:
+            case R.id.action_sort_top_rated:
                 mMainViewModel.setCurrentSortType(MainViewModel.SortType.TOP);
                 if (getSupportActionBar() != null) getSupportActionBar().setTitle(R.string.menu_top_rated);
                 return true;
-            case R.id.action_favorite:
+            case R.id.action_sort_favorite:
                 mMainViewModel.setCurrentSortType(MainViewModel.SortType.FAVORITE);
                 if (getSupportActionBar() != null) getSupportActionBar().setTitle(R.string.menu_favorite);
 

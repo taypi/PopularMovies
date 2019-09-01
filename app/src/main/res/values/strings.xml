@@ -6,10 +6,13 @@
     <string name="menu_popular">Most Popular</string>
     <string name="menu_top_rated">Top Rated</string>
     <string name="menu_favorite">Favorites</string>
+    <string name="favorite">Favorite this movie</string>
+    <string name="share">Share this movie</string>
     <string name="overview">Overview</string>
     <string name="release_date">Release date: %1$s</string>
     <string name="user_score">User score: %1$s</string>
     <string name="original_language">Original language: %1$s</string>
     <string name="detail_error">Could not show details</string>
     <string name="poster_content_description">Movie poster</string>
+    <string name="share_message">Here\'s a movie for you: %s%d</string>
 </resources>

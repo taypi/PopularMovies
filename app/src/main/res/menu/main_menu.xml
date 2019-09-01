@@ -2,17 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_popular"
+        android:id="@+id/action_sort_popular"
         app:showAsAction="never"
         android:title="@string/menu_popular">
     </item>
     <item
-        android:id="@+id/action_top_rated"
+        android:id="@+id/action_sort_top_rated"
         app:showAsAction="never"
         android:title="@string/menu_top_rated">
     </item>
     <item
-        android:id="@+id/action_favorite"
+        android:id="@+id/action_sort_favorite"
         app:showAsAction="never"
         android:title="@string/menu_favorite">
     </item>

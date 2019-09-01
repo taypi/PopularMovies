@@ -58,8 +58,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/iv_trailer"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_trailer"
-                tools:text="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"/>
+                app:layout_constraintTop_toBottomOf="@+id/iv_trailer"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

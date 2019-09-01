@@ -4,11 +4,11 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.example.popularmovies.BuildConfig;
 import com.example.popularmovies.api.MovieApiService;
 import com.example.popularmovies.database.MovieDatabase;
 import com.example.popularmovies.models.Movie;
 import com.example.popularmovies.models.MovieList;
+import com.example.popularmovies.utils.ApiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,15 +23,14 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Repository {
-    private static final String BASE_URL = "https://api.themoviedb.org/3/";
+    private static Repository sInstance;
     private ExecutorService mExecutor = Executors.newSingleThreadExecutor();
     private MovieApiService mService;
     private MovieDatabase mDatabase;
-    private static Repository sInstance;
 
     private Repository(@NonNull Context context) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl(ApiUtils.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         mService = retrofit.create(MovieApiService.class);
@@ -48,14 +47,14 @@ public class Repository {
 
     public void requestTopMovies(@NonNull ListRequestCallbacks callbacks) {
         mExecutor.submit(() -> {
-            Call<MovieList> call = mService.getTopRatedMovies(BuildConfig.ApiKey);
+            Call<MovieList> call = mService.getTopRatedMovies(ApiUtils.API_KEY);
             enqueueListCall(call, callbacks);
         });
     }
 
     public void requestPopularMovies(@NonNull ListRequestCallbacks callbacks) {
         mExecutor.submit(() -> {
-            Call<MovieList> call = mService.getPopularMovies(BuildConfig.ApiKey);
+            Call<MovieList> call = mService.getPopularMovies(ApiUtils.API_KEY);
             enqueueListCall(call, callbacks);
         });
     }
@@ -64,7 +63,7 @@ public class Repository {
         List<Movie> movies = new ArrayList<>();
         try {
             movies = mExecutor.submit(() -> mDatabase.movieDao().getFavoriteMovies()).get();
-        } catch (ExecutionException|InterruptedException e) {
+        } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
         return movies;
@@ -72,7 +71,8 @@ public class Repository {
 
     public void requestMovieDetails(long id, @NonNull RequestCallbacks callbacks) {
         mExecutor.submit(() -> {
-            Call<Movie> call = mService.getMovieDetails(id, BuildConfig.ApiKey, "reviews,videos");
+            Call<Movie> call = mService.getMovieDetails(id, ApiUtils.API_KEY,
+                    ApiUtils.DETAILS_QUERY);
             enqueueCall(call, callbacks);
         });
     }
@@ -85,6 +85,17 @@ public class Repository {
                 mDatabase.movieDao().insertFavoriteMovie(movie);
             }
         });
+    }
+
+    public boolean isFavorite(@NonNull Movie movie) {
+        Movie favoriteMovie = null;
+        try {
+            favoriteMovie = mExecutor.submit(
+                    () -> mDatabase.movieDao().getFavoriteById(movie.getId())).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return favoriteMovie != null;
     }
 
     private void enqueueListCall(Call<MovieList> call, @NonNull ListRequestCallbacks callbacks) {
