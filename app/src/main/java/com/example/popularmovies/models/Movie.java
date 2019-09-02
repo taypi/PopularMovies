@@ -9,20 +9,10 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 @Entity(tableName = "favorite_movie")
 public class Movie implements Parcelable {
-    // Parcelable stuff
-    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
-        @Override
-        public Movie createFromParcel(Parcel in) {
-            return new Movie(in);
-        }
-
-        @Override
-        public Movie[] newArray(int size) {
-            return new Movie[size];
-        }
-    };
     private final static String NOT_AVAILABLE = "Not available";
     @SerializedName("id")
     @PrimaryKey
@@ -45,6 +35,9 @@ public class Movie implements Parcelable {
     private String originalLanguage;
     @SerializedName("runtime")
     private String runtime;
+    @Ignore
+    @SerializedName("genres")
+    private List<Genre> genres;
     @Ignore
     @SerializedName("videos")
     private TrailerList trailers;
@@ -87,13 +80,14 @@ public class Movie implements Parcelable {
 
     @Ignore
     private Movie(Parcel in) {
+        id = in.readInt();
         title = in.readString();
         posterPath = in.readString();
         overview = in.readString();
         releaseDate = in.readString();
-        id = in.readInt();
         backdropPath = in.readString();
         averageVote = in.readString();
+        voteCount = in.readString();
         originalLanguage = in.readString();
     }
 
@@ -177,6 +171,14 @@ public class Movie implements Parcelable {
         this.runtime = runtime;
     }
 
+    public List<Genre> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(List<Genre> genres) {
+        this.genres = genres;
+    }
+
     public TrailerList getTrailers() {
         return trailers;
     }
@@ -197,6 +199,19 @@ public class Movie implements Parcelable {
         return string == null ? NOT_AVAILABLE : string;
     }
 
+    // Parcelable stuff
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+
     @Override
     public int describeContents() {
         return 0;
@@ -204,13 +219,14 @@ public class Movie implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
         dest.writeString(title);
         dest.writeString(posterPath);
         dest.writeString(overview);
         dest.writeString(releaseDate);
-        dest.writeInt(id);
         dest.writeString(backdropPath);
         dest.writeString(averageVote);
+        dest.writeString(voteCount);
         dest.writeString(originalLanguage);
     }
 }

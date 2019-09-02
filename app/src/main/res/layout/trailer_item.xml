@@ -23,7 +23,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/white">
+            android:background="@color/colorPrimary">
 
             <ImageView
                 android:id="@+id/iv_trailer"
@@ -57,7 +57,7 @@
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/iv_trailer"
                 app:layout_constraintStart_toStartOf="parent"
