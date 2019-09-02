@@ -48,6 +48,9 @@ public class DetailActivity extends AppCompatActivity {
         DetailViewModelFactory factory = new DetailViewModelFactory(Repository.getInstance(this));
         mDetailViewModel = ViewModelProviders.of(this, factory).get(DetailViewModel.class);
         mDetailViewModel.getMovieDetails().observe(this, details -> {
+            if (details == null) {
+                return;
+            }
             mReviewAdapter.setReviewData(details.getReviews().getReviewList());
             mTrailerAdapter.setTrailerData(details.getTrailers().geTrailerList());
             TextView genres = findViewById(R.id.tv_genres);

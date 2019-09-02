@@ -52,208 +52,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/tv_detail_title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:textColor="@android:color/white"
-                android:textSize="24sp"
-                app:layout_constrainedWidth="true"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+            <include
+                layout="@layout/movie_details"
+                android:id="@+id/movie_details"/>
 
-            <TextView
-                android:id="@+id/tv_genres"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:textColor="@android:color/white"
-                android:textSize="14sp"
-                app:layout_constrainedWidth="true"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_detail_title"/>
-
-            <View
-                android:id="@+id/separator_top"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="16dp"
-                android:background="@android:color/darker_gray"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_genres"/>
-
-            <ImageView
-                android:id="@+id/iv_star"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:src="@drawable/ic_star"
-                app:layout_constraintEnd_toStartOf="@+id/iv_language"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/separator_top"/>
-
-            <TextView
-                android:id="@+id/tv_score"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@id/iv_star"
-                app:layout_constraintStart_toEndOf="@id/iv_star"/>
-
-            <TextView
-                android:id="@+id/tv_total_votes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="@id/tv_score"
-                app:layout_constraintStart_toStartOf="@id/iv_star"
-                app:layout_constraintTop_toBottomOf="@id/tv_score"
-                tools:text="789 votes"/>
-
-            <ImageView
-                android:id="@+id/iv_language"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:src="@drawable/ic_language"
-                app:layout_constraintEnd_toStartOf="@+id/iv_date"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/iv_star"
-                app:layout_constraintTop_toBottomOf="@id/separator_top"/>
-
-            <TextView
-                android:id="@+id/tv_language"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@id/iv_language"
-                app:layout_constraintStart_toEndOf="@id/iv_language"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/language"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="@id/tv_language"
-                app:layout_constraintStart_toStartOf="@id/iv_language"
-                app:layout_constraintTop_toBottomOf="@id/tv_language"
-                tools:text="Language"/>
-
-            <ImageView
-                android:id="@+id/iv_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="32dp"
-                android:src="@drawable/ic_date_range"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/iv_language"
-                app:layout_constraintTop_toBottomOf="@id/separator_top"/>
-
-            <TextView
-                android:id="@+id/tv_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@id/iv_date"
-                app:layout_constraintStart_toEndOf="@id/iv_date"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/date"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="@id/tv_date"
-                app:layout_constraintStart_toStartOf="@id/iv_date"
-                app:layout_constraintTop_toBottomOf="@id/tv_date"/>
-
-            <View
-                android:id="@+id/separator_bottom"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="16dp"
-                android:background="@android:color/darker_gray"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_total_votes"/>
-
-            <TextView
-                android:id="@+id/overview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="16dp"
-                android:text="@string/overview"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/separator_bottom"/>
-
-            <TextView
-                android:id="@+id/tv_overview"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/overview"/>
-
-            <TextView
+            <include
+                layout="@layout/trailers"
                 android:id="@+id/trailers"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:layout_marginStart="16dp"
-                android:text="@string/trailers"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_overview"/>
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintTop_toBottomOf="@id/movie_details"
+                app:layout_constraintStart_toStartOf="parent"/>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/trailer_recycler_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/trailers"/>
-
-            <TextView
+            <include
+                layout="@layout/reviews"
                 android:id="@+id/reviews"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:layout_marginStart="16dp"
-                android:text="@string/reviews"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/trailer_recycler_view"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/review_recycler_view"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:paddingBottom="24dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/reviews"/>
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintTop_toBottomOf="@id/trailers"
+                app:layout_constraintStart_toStartOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -268,6 +85,7 @@
         android:elevation="6dp"
         app:borderWidth="0dp"
         app:layout_anchor="@id/bar_layout"
-        app:layout_anchorGravity="bottom|right|end" app:srcCompat="@drawable/ic_favorite"/>
+        app:layout_anchorGravity="bottom|right|end"
+        app:srcCompat="@drawable/ic_favorite"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
