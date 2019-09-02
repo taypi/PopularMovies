@@ -6,12 +6,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ShareCompat;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.popularmovies.R;
 import com.example.popularmovies.models.Movie;
@@ -23,6 +26,7 @@ import com.example.popularmovies.viewmodel.DetailViewModel;
 import com.example.popularmovies.viewmodel.DetailViewModelFactory;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class DetailActivity extends AppCompatActivity {
     private Movie mMovie;
@@ -35,14 +39,16 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
-//        configureReviewRecyclerView();
-//        configureTrailerRecyclerView();
+        configureReviewRecyclerView();
+        configureTrailerRecyclerView();
 
         DetailViewModelFactory factory = new DetailViewModelFactory(Repository.getInstance(this));
         mDetailViewModel = ViewModelProviders.of(this, factory).get(DetailViewModel.class);
         mDetailViewModel.getMovieDetails().observe(this, details -> {
             mReviewAdapter.setReviewData(details.getReviews().getReviewList());
             mTrailerAdapter.setTrailerData(details.getTrailers().geTrailerList());
+//            TextView runtime = findViewById(R.id.tv_detail_runtime);
+//            runtime.setText(details.getRuntime());
         });
 
         Intent intent = getIntent();
@@ -61,36 +67,27 @@ public class DetailActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.details_menu, menu);
-        setFavoriteIcon(menu.findItem(R.id.action_favorite));
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_share:
-                ShareCompat.IntentBuilder.from(this)
-                        .setType("text/plain")
-                        .setChooserTitle("Share movie")
-                        .setText(getString(R.string.share_message, ApiUtils.SHARE_URL,
-                                mMovie.getId()))
-                        .startChooser();
-                return true;
-            case R.id.action_favorite:
-                mDetailViewModel.toggleFavoriteStatus(mMovie);
-                setFavoriteIcon(item);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.action_share) {
+            ShareCompat.IntentBuilder.from(this)
+                    .setType("text/plain")
+                    .setChooserTitle("Share movie")
+                    .setText(getString(R.string.share_message, ApiUtils.SHARE_URL,
+                            mMovie.getId()))
+                    .startChooser();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 
-    private void setFavoriteIcon(MenuItem item) {
-        item.setIcon(getDrawable(mDetailViewModel.getFavoriteIcon(mMovie)));
-    }
-
     private void setToolbarText() {
-        // Code snippet from https://stackoverflow/com/questions/31662416/show-collapsingtoolbarlayout-title-only-when-collapsed
+        // Code snippet from https://stackoverflow/com/questions/31662416/show
+        // -collapsingtoolbarlayout-title-only-when-collapsed
         final CollapsingToolbarLayout collapsingToolbarLayout = findViewById(
                 R.id.collapsing_toolbar_layout);
         AppBarLayout appBarLayout = findViewById(R.id.bar_layout);
@@ -117,57 +114,55 @@ public class DetailActivity extends AppCompatActivity {
     private void setUi(Movie movie) {
         mMovie = movie;
         ImageView poster = findViewById(R.id.iv_movie_collapse);
-        ImageUtils.setPoster(poster, movie.getBackdropPath());
         Toolbar toolbar = findViewById(R.id.toolbar);
+        FloatingActionButton fab = findViewById(R.id.fab);
+        ImageUtils.setPoster(poster, movie.getBackdropPath());
         toolbar.setTitle(movie.getTitle());
         setSupportActionBar(toolbar);
         setToolbarText();
-//        TextView movieTitle = findViewById(R.id.tv_detail_title);
-//        TextView releaseDate = findViewById(R.id.tv_detail_release);
+        TextView movieTitle = findViewById(R.id.tv_detail_title);
+        TextView releaseDate = findViewById(R.id.tv_detail_release);
 //        TextView language = findViewById(R.id.tv_detail_language);
 //        TextView overview = findViewById(R.id.tv_detail_overview);
 //        TextView score = findViewById(R.id.tv_detail_vote_average);
-//        ImageView poster = findViewById(R.id.iv_detail_poster);
-//        Button favoriteButton = findViewById(R.id.btn_favorite);
-//
-//        movieTitle.setText(movie.getTitle());
-//        releaseDate.setText(
-//                getResources().getString(R.string.release_date, movie.getReleaseDate()));
+        fab.setOnClickListener(view -> {
+            mDetailViewModel.toggleFavoriteStatus(mMovie);
+            fab.setImageResource(mDetailViewModel.getFavoriteIcon(mMovie));
+        });
+        movieTitle.setText(movie.getTitle());
+        releaseDate.setText(
+                getResources().getString(R.string.release_date, movie.getReleaseDate()));
+
 //        score.setText(getResources().getString(R.string.user_score, movie.getAverageVote()));
 //        language.setText(
 //                getResources().getString(R.string.original_language, movie.getOriginalLanguage
 //                ()));
 //        overview.setText(movie.getOverview());
-//        ImageUtils.setPoster(poster, movie.getPosterPath());
-//
-//        favoriteButton.setOnClickListener(listener -> mDetailViewModel.toggleFavoriteStatus
-//        (movie));
-//
-//        mDetailViewModel.loadMovieDetails(movie.getId());
+        mDetailViewModel.loadMovieDetails(movie.getId());
     }
 
-//    private void configureReviewRecyclerView() {
-//        RecyclerView recyclerView = findViewById(R.id.review_recycler_view);
-//        recyclerView.setHasFixedSize(true);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        mReviewAdapter = new ReviewAdapter();
-//        recyclerView.setAdapter(mReviewAdapter);
-//        recyclerView.setNestedScrollingEnabled(false);
-//    }
-//
-//    private void configureTrailerRecyclerView() {
-//        RecyclerView recyclerView = findViewById(R.id.trailer_recycler_view);
-//        recyclerView.setHasFixedSize(true);
-//        recyclerView.setLayoutManager(
-//                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-//        mTrailerAdapter = new TrailerAdapter(trailer -> {
-//            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube
-//            .com/watch?v=" + trailer.getKey()));
-//            if (intent.resolveActivity(getApplicationContext().getPackageManager()) != null) {
-//                startActivity(intent);
-//            }
-//        });
-//        recyclerView.setAdapter(mTrailerAdapter);
-//        recyclerView.setNestedScrollingEnabled(false);
-//    }
+    private void configureReviewRecyclerView() {
+        RecyclerView recyclerView = findViewById(R.id.review_recycler_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mReviewAdapter = new ReviewAdapter();
+        recyclerView.setAdapter(mReviewAdapter);
+        recyclerView.setNestedScrollingEnabled(false);
+    }
+
+    private void configureTrailerRecyclerView() {
+        RecyclerView recyclerView = findViewById(R.id.trailer_recycler_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(
+                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        mTrailerAdapter = new TrailerAdapter(trailer -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW,
+                    ApiUtils.getTrailerUri(trailer.getKey()));
+            if (intent.resolveActivity(getApplicationContext().getPackageManager()) != null) {
+                startActivity(intent);
+            }
+        });
+        recyclerView.setAdapter(mTrailerAdapter);
+        recyclerView.setNestedScrollingEnabled(false);
+    }
 }

@@ -6,9 +6,4 @@
         android:icon="@drawable/ic_share"
         android:title="@string/share"
         app:showAsAction="ifRoom"/>
-    <item
-        android:id="@+id/action_favorite"
-        android:title="@string/favorite"
-        android:icon="@drawable/ic_favorite"
-        app:showAsAction="ifRoom"/>
 </menu>
