@@ -125,6 +125,7 @@ public class DetailActivity extends AppCompatActivity {
 //        TextView language = findViewById(R.id.tv_detail_language);
 //        TextView overview = findViewById(R.id.tv_detail_overview);
 //        TextView score = findViewById(R.id.tv_detail_vote_average);
+        fab.setImageResource(mDetailViewModel.getFavoriteIcon(mMovie));
         fab.setOnClickListener(view -> {
             mDetailViewModel.toggleFavoriteStatus(mMovie);
             fab.setImageResource(mDetailViewModel.getFavoriteIcon(mMovie));

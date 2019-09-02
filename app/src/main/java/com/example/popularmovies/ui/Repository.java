@@ -3,6 +3,7 @@ package com.example.popularmovies.ui;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.popularmovies.api.MovieApiService;
 import com.example.popularmovies.database.MovieDatabase;
@@ -24,6 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Repository {
     private static Repository sInstance;
+    private MutableLiveData<List<Movie>> favoriteList = new MutableLiveData<>();
     private ExecutorService mExecutor = Executors.newSingleThreadExecutor();
     private MovieApiService mService;
     private MovieDatabase mDatabase;
@@ -43,6 +45,10 @@ public class Repository {
             sInstance = new Repository(context);
         }
         return sInstance;
+    }
+
+    public MutableLiveData<List<Movie>> getFavoriteList() {
+        return favoriteList;
     }
 
     public void requestTopMovies(@NonNull ListRequestCallbacks callbacks) {
@@ -84,6 +90,7 @@ public class Repository {
             } else {
                 mDatabase.movieDao().insertFavoriteMovie(movie);
             }
+            favoriteList.postValue(mDatabase.movieDao().getFavoriteMovies());
         });
     }
 
