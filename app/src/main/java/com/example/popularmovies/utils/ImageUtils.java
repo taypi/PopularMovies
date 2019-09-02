@@ -18,7 +18,7 @@ public class ImageUtils {
     private static void setImage(ImageView imageView, String path) {
         Picasso.get()
                 .load(path)
-                .placeholder(R.mipmap.ic_launcher)
+                .placeholder(R.drawable.ic_local_movies_black_24dp)
                 .into(imageView, new Callback() {
                     @Override
                     public void onSuccess() {
