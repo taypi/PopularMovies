@@ -8,17 +8,6 @@
         android:id="@+id/iv_list_item"
         android:layout_width="match_parent"
         android:layout_height="340dp"
+        android:layout_margin="1dp"
         android:scaleType="centerCrop"/>
-
-    <TextView
-        android:id="@+id/tv_list_item"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:padding="8dp"
-        android:background="@color/background_alpha"
-        android:textColor="@android:color/white"
-        android:textSize="12sp"/>
 </RelativeLayout>

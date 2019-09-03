@@ -100,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void showMoviesData(List<Movie> movieData) {
         mAdapter.setMovieData(movieData);
-
         mErrorMessageDisplay.setVisibility(View.INVISIBLE);
         mRecyclerView.setVisibility(View.VISIBLE);
     }

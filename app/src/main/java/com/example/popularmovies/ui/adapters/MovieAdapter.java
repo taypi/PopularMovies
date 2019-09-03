@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.popularmovies.R;
 import com.example.popularmovies.models.Movie;
@@ -43,7 +42,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     @Override
     public void onBindViewHolder(MovieViewHolder viewHolder, int position) {
         Movie movie = mMovieData.get(position);
-        viewHolder.mMovieItemTextView.setText(movie.getTitle());
         ImageUtils.setPoster(viewHolder.mPoster, movie.getPosterPath());
     }
 
@@ -53,12 +51,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     }
 
     public class MovieViewHolder extends RecyclerView.ViewHolder {
-        public final TextView mMovieItemTextView;
         public final ImageView mPoster;
 
         public MovieViewHolder(View view) {
             super(view);
-            mMovieItemTextView = view.findViewById(R.id.tv_list_item);
             mPoster = view.findViewById(R.id.iv_list_item);
 
             view.setOnClickListener(v -> mClickHandler.onClick(mMovieData.get(getAdapterPosition())));
