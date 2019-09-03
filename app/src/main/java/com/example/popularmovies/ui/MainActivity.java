@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         mSwipeRefreshLayout.setRefreshing(true);
+        mRecyclerView.smoothScrollToPosition(0);
         switch (item.getItemId()) {
             case R.id.action_sort_popular:
                 mMainViewModel.setCurrentSortType(MainViewModel.SortType.POPULAR);
@@ -72,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_sort_favorite:
                 mMainViewModel.setCurrentSortType(MainViewModel.SortType.FAVORITE);
                 if (getSupportActionBar() != null) getSupportActionBar().setTitle(R.string.menu_favorite);
-
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
