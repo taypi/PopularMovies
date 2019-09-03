@@ -35,8 +35,8 @@ public class Repository {
                 .baseUrl(ApiUtils.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        mService = retrofit.create(MovieApiService.class);
 
+        mService = retrofit.create(MovieApiService.class);
         mDatabase = MovieDatabase.getInstance(context);
     }
 

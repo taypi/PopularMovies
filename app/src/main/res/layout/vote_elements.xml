@@ -23,7 +23,7 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@id/iv_star"
         app:layout_constraintStart_toEndOf="@id/iv_star"
-        tools:text="Stuuuuuuff"/>
+        tools:text="Stuuuuuuuuff"/>
 
     <TextView
         android:id="@+id/tv_total_votes"
@@ -31,8 +31,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@id/tv_score"
-        app:layout_constraintStart_toStartOf="@id/iv_star"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_score"
         tools:text="789 votes"/>
 
