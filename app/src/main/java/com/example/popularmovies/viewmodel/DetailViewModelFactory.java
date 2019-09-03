@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.popularmovies.ui.Repository;
+import com.example.popularmovies.repository.Repository;
 
 public class DetailViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     private final Repository mRepository;

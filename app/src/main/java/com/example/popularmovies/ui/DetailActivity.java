@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.popularmovies.R;
 import com.example.popularmovies.models.Genre;
 import com.example.popularmovies.models.Movie;
+import com.example.popularmovies.repository.Repository;
 import com.example.popularmovies.ui.adapters.ReviewAdapter;
 import com.example.popularmovies.ui.adapters.TrailerAdapter;
 import com.example.popularmovies.utils.ApiUtils;

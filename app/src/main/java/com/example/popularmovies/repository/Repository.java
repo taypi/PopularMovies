@@ -1,4 +1,4 @@
-package com.example.popularmovies.ui;
+package com.example.popularmovies.repository;
 
 import android.content.Context;
 

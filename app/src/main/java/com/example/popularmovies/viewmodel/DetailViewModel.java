@@ -1,9 +1,7 @@
 package com.example.popularmovies.viewmodel;
 
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -11,7 +9,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.popularmovies.R;
 import com.example.popularmovies.models.Movie;
-import com.example.popularmovies.ui.Repository;
+import com.example.popularmovies.repository.Repository;
 
 public class DetailViewModel extends ViewModel implements Repository.RequestCallbacks {
     private Repository mRepository;

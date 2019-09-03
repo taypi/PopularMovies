@@ -9,7 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
-import com.example.popularmovies.ui.Repository;
+import com.example.popularmovies.repository.Repository;
 import com.example.popularmovies.models.Movie;
 
 import java.util.ArrayList;
