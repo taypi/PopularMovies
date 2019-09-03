@@ -111,7 +111,8 @@ public class DetailActivity extends AppCompatActivity {
         mMovie = movie;
         mDetailViewModel.loadMovieDetails(movie.getId());
 
-        ImageView backdrop = findViewById(R.id.iv_movie_collapse);
+        ImageView backdrop = findViewById(R.id.iv_backdrop);
+        ImageView poster = findViewById(R.id.iv_poster);
         TextView movieTitle = findViewById(R.id.tv_detail_title);
         TextView score = findViewById(R.id.tv_score);
         TextView totalVotes = findViewById(R.id.tv_total_votes);
@@ -122,6 +123,7 @@ public class DetailActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.fab);
 
         ImageUtils.setPoster(backdrop, movie.getBackdropPath());
+        ImageUtils.setPoster(poster, movie.getPosterPath());
         movieTitle.setText(movie.getTitle());
         score.setText(movie.getAverageVote());
         totalVotes.setText(getString(R.string.total_votes, movie.getVoteCount()));
