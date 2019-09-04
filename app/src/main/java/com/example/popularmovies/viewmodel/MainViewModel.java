@@ -3,7 +3,6 @@ package com.example.popularmovies.viewmodel;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.core.util.Consumer;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -13,17 +12,13 @@ import com.example.popularmovies.repository.Repository;
 import com.example.popularmovies.models.Movie;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 public class MainViewModel extends ViewModel implements Repository.ListRequestCallbacks {
     private SortType mCurrentSortType = SortType.POPULAR;
     private MutableLiveData<List<Movie>> mMovies = new MutableLiveData<>();
     private Observer<List<Movie>> mFavoriteObserver = this::onFavoriteChanged;
     private Repository mRepository;
-    private final Map<SortType, Consumer<Boolean>> functionMap = createMap();
 
     public MainViewModel(Repository repository) {
         mRepository = repository;
@@ -57,8 +52,21 @@ public class MainViewModel extends ViewModel implements Repository.ListRequestCa
         loadMovies();
     }
 
+    public SortType getCurrentSortType() {
+        return mCurrentSortType;
+    }
+
     public void loadMovies() {
-        Objects.requireNonNull(functionMap.get(mCurrentSortType)).accept(true);
+        switch (mCurrentSortType) {
+            case FAVORITE:
+                mMovies.postValue(mRepository.getFavoriteMovies());
+                break;
+            case TOP:
+                mRepository.requestTopMovies(this);
+                break;
+            default:
+                mRepository.requestPopularMovies(this);
+        }
     }
 
     public enum SortType {
@@ -71,14 +79,5 @@ public class MainViewModel extends ViewModel implements Repository.ListRequestCa
         if (mCurrentSortType == SortType.FAVORITE) {
             mMovies.postValue(favoriteList);
         }
-    }
-
-    private Map<SortType, Consumer<Boolean>> createMap() {
-        Map<SortType, Consumer<Boolean>> map = new HashMap<>();
-        map.put(SortType.POPULAR, notUsed -> mRepository.requestPopularMovies(this));
-        map.put(SortType.TOP, notUsed -> mRepository.requestTopMovies(this));
-        map.put(SortType.FAVORITE,
-                notUsed -> mMovies.postValue(mRepository.getFavoriteMovies()));
-        return map;
     }
 }

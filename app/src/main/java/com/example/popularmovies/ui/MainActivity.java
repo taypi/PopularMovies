@@ -1,7 +1,10 @@
 package com.example.popularmovies.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,9 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.popularmovies.R;
+import com.example.popularmovies.models.Movie;
 import com.example.popularmovies.repository.Repository;
 import com.example.popularmovies.ui.adapters.MovieAdapter;
-import com.example.popularmovies.models.Movie;
 import com.example.popularmovies.viewmodel.MainViewModel;
 import com.example.popularmovies.viewmodel.MainViewModelFactory;
 
@@ -65,15 +68,24 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_sort_popular:
                 mMainViewModel.setCurrentSortType(MainViewModel.SortType.POPULAR);
-                if (getSupportActionBar() != null) getSupportActionBar().setTitle(R.string.menu_popular);
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().setTitle(
+                            R.string.menu_popular);
+                }
                 return true;
             case R.id.action_sort_top_rated:
                 mMainViewModel.setCurrentSortType(MainViewModel.SortType.TOP);
-                if (getSupportActionBar() != null) getSupportActionBar().setTitle(R.string.menu_top_rated);
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().setTitle(
+                            R.string.menu_top_rated);
+                }
                 return true;
             case R.id.action_sort_favorite:
                 mMainViewModel.setCurrentSortType(MainViewModel.SortType.FAVORITE);
-                if (getSupportActionBar() != null) getSupportActionBar().setTitle(R.string.menu_favorite);
+                if (getSupportActionBar() != null) {
+                    getSupportActionBar().setTitle(
+                            R.string.menu_favorite);
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -82,8 +94,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void onMoviesChanged(List<Movie> movies) {
         mSwipeRefreshLayout.setRefreshing(false);
-        if (movies.isEmpty()) {
-            showErrorMessage();
+        if (!isConnected()
+                && mMainViewModel.getCurrentSortType() != MainViewModel.SortType.FAVORITE) {
+            showErrorMessage(R.string.network_error);
+        } else if (movies.isEmpty()) {
+            showErrorMessage(R.string.no_favorites);
         } else {
             showMoviesData(movies);
         }
@@ -94,8 +109,9 @@ public class MainActivity extends AppCompatActivity {
         mMainViewModel.loadMovies();
     }
 
-    private void showErrorMessage() {
+    private void showErrorMessage(int error_message) {
         mRecyclerView.setVisibility(View.INVISIBLE);
+        mErrorMessageDisplay.setText(error_message);
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
     }
 
@@ -121,5 +137,13 @@ public class MainActivity extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getSize(size);
         int spanCount = size.x / getResources().getInteger(R.integer.screen_size_ratio);
         return spanCount > 0 ? spanCount : 1;
+    }
+
+    private boolean isConnected() {
+        ConnectivityManager cm =
+                (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 }
