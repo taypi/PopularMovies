@@ -10,7 +10,7 @@
         android:id="@+id/iv_language"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/small_margin"
         android:src="@drawable/ic_language"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
@@ -19,17 +19,17 @@
         android:id="@+id/tv_language"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textSize="16sp"
+        android:layout_marginStart="@dimen/small_margin"
+        android:textSize="@dimen/body_font_size"
         app:layout_constraintBottom_toBottomOf="@id/iv_language"
         app:layout_constraintStart_toEndOf="@id/iv_language"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/small_margin"
         android:text="@string/language"
-        android:textSize="14sp"
+        android:textSize="@dimen/subtitle_font_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_language"

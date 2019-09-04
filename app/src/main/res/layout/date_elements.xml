@@ -10,8 +10,8 @@
         android:id="@+id/iv_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="@dimen/small_margin"
+        android:layout_marginEnd="@dimen/small_margin"
         android:src="@drawable/ic_date_range"
         app:layout_constraintEnd_toStartOf="@+id/tv_date"
         app:layout_constraintHorizontal_bias="0.5"
@@ -21,8 +21,8 @@
         android:id="@+id/tv_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textSize="16sp"
+        android:layout_marginStart="@dimen/small_margin"
+        android:textSize="@dimen/body_font_size"
         app:layout_constraintBottom_toBottomOf="@id/iv_date"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="2019-20-69"/>
@@ -30,9 +30,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/small_margin"
         android:text="@string/date"
-        android:textSize="14sp"
+        android:textSize="@dimen/subtitle_font_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_date"/>

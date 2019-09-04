@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="movie_item_height">240dp</dimen>
+    <dimen name="movie_item_height">340dp</dimen>
+    <dimen name="bigger_margin">24dp</dimen>
+    <dimen name="big_margin">16dp</dimen>
+    <dimen name="small_margin">8dp</dimen>
+    <dimen name="app_bar_height">275dp</dimen>
+    <dimen name="elevation">6dp</dimen>
+    <dimen name="top_overlap">100dp</dimen>
+    <dimen name="detail_poster_height">200dp</dimen>
+    <dimen name="detail_title_offset">130dp</dimen>
+    <dimen name="header_font_size">24sp</dimen>
+    <dimen name="body_font_size">16sp</dimen>
+    <dimen name="subtitle_font_size">14sp</dimen>
+    <dimen name="corner_radius">12dp</dimen>
 </resources>

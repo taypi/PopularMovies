@@ -10,11 +10,11 @@
         android:id="@+id/tv_reviews"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginTop="@dimen/bigger_margin"
+        android:layout_marginStart="@dimen/big_margin"
         android:text="@string/reviews"
         android:textColor="@color/white"
-        android:textSize="16sp"
+        android:textSize="@dimen/body_font_size"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
@@ -22,7 +22,7 @@
         android:id="@+id/review_recycler_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingBottom="24dp"
+        android:paddingBottom="@dimen/bigger_margin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_reviews"/>
