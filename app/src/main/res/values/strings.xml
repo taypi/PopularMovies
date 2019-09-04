@@ -20,6 +20,8 @@
     <string name="language">Language</string>
     <string name="date">Release Date</string>
     <string name="trailers">Trailers</string>
+    <string name="no_trailers">No trailers available</string>
     <string name="reviews">Reviews</string>
+    <string name="no_reviews">No reviews available</string>
     <string name="intent_share">Share movie</string>
 </resources>

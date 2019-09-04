@@ -21,6 +21,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.popularmovies.R;
 import com.example.popularmovies.models.Genre;
 import com.example.popularmovies.models.Movie;
+import com.example.popularmovies.models.Review;
+import com.example.popularmovies.models.Trailer;
 import com.example.popularmovies.repository.Repository;
 import com.example.popularmovies.ui.adapters.ReviewAdapter;
 import com.example.popularmovies.ui.adapters.TrailerAdapter;
@@ -32,6 +34,7 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class DetailActivity extends AppCompatActivity {
@@ -90,13 +93,18 @@ public class DetailActivity extends AppCompatActivity {
         if (movie == null) {
             return;
         }
-        mTrailerAdapter.setTrailerData(movie.getTrailers().geTrailerList());
-        mReviewAdapter.setReviewData(movie.getReviews().getReviewList());
+        List<Trailer> trailers = movie.getTrailerResults().geTrailerList();
+        List<Review> reviews = movie.getReviewResults().getReviewList();
 
-        ConstraintLayout trailers = findViewById(R.id.trailers);
-        trailers.setVisibility(View.VISIBLE);
-        ConstraintLayout reviews = findViewById(R.id.reviews);
-        reviews.setVisibility(View.VISIBLE);
+        if (!trailers.isEmpty()) {
+            mTrailerAdapter.setTrailerData(movie.getTrailerResults().geTrailerList());
+            findViewById(R.id.trailers).setVisibility(View.VISIBLE);
+        }
+
+        if (!reviews.isEmpty()) {
+            mReviewAdapter.setReviewData(movie.getReviewResults().getReviewList());
+            findViewById(R.id.reviews).setVisibility(View.VISIBLE);
+        }
 
         TextView genres = findViewById(R.id.tv_genres);
         genres.setText(

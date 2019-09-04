@@ -179,7 +179,7 @@ public class Movie implements Parcelable {
         this.genres = genres;
     }
 
-    public TrailerList getTrailers() {
+    public TrailerList getTrailerResults() {
         return trailers;
     }
 
@@ -187,7 +187,7 @@ public class Movie implements Parcelable {
         this.trailers = trailers;
     }
 
-    public ReviewList getReviews() {
+    public ReviewList getReviewResults() {
         return reviews;
     }
 
