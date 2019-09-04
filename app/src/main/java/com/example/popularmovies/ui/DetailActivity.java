@@ -44,15 +44,11 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
-
         configureReviewRecyclerView();
         configureTrailerRecyclerView();
-
-        DetailViewModelFactory factory = new DetailViewModelFactory(Repository.getInstance(this));
-        mDetailViewModel = ViewModelProviders.of(this, factory).get(DetailViewModel.class);
-        mDetailViewModel.getMovieDetails().observe(this, this::onDetailsChanged);
-
         handleIntentInfo();
+        setViewModelObservers();
+        setUi();
     }
 
     @Override
@@ -81,7 +77,7 @@ public class DetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent.hasExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE)
                 && intent.getParcelableExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE) != null) {
-            setUi(intent.getParcelableExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE));
+            mMovie = intent.getParcelableExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE);
         } else {
             startActivity(new Intent(this, MainActivity.class));
 
@@ -107,9 +103,21 @@ public class DetailActivity extends AppCompatActivity {
                 movie.getGenres().stream().map(Genre::getName).collect(Collectors.joining(", ")));
     }
 
-    private void setUi(Movie movie) {
-        mMovie = movie;
-        mDetailViewModel.loadMovieDetails(movie.getId());
+    private void setViewModelObservers() {
+        DetailViewModelFactory factory = new DetailViewModelFactory(Repository.getInstance(this),
+                mMovie);
+        mDetailViewModel = ViewModelProviders.of(this, factory).get(DetailViewModel.class);
+        mDetailViewModel.getMovieDetails().observe(this, this::onDetailsChanged);
+        mDetailViewModel.getFavoriteStatus().observe(this, this::onFavoriteStatusChanged);
+    }
+
+    private void onFavoriteStatusChanged(boolean isFavorite) {
+        ((FloatingActionButton) findViewById(R.id.fab)).setImageResource(
+                isFavorite ? R.drawable.ic_favorite_fill : R.drawable.ic_favorite);
+    }
+
+    private void setUi() {
+        mDetailViewModel.loadMovieDetails(mMovie.getId());
 
         ImageView backdrop = findViewById(R.id.iv_backdrop);
         ImageView poster = findViewById(R.id.iv_poster);
@@ -122,28 +130,23 @@ public class DetailActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
 
-        ImageUtils.setPoster(backdrop, movie.getBackdropPath());
-        ImageUtils.setPoster(poster, movie.getPosterPath());
-        movieTitle.setText(movie.getTitle());
-        score.setText(movie.getAverageVote());
-        totalVotes.setText(getString(R.string.total_votes, movie.getVoteCount()));
+        ImageUtils.setPoster(backdrop, mMovie.getBackdropPath());
+        ImageUtils.setPoster(poster, mMovie.getPosterPath());
+        movieTitle.setText(mMovie.getTitle());
+        score.setText(mMovie.getAverageVote());
+        totalVotes.setText(getString(R.string.total_votes, mMovie.getVoteCount()));
 
-        language.setText(movie.getOriginalLanguage());
+        language.setText(mMovie.getOriginalLanguage());
         language.setAllCaps(true);
 
-        date.setText(movie.getReleaseDate());
-        overview.setText(movie.getOverview());
+        date.setText(mMovie.getReleaseDate());
+        overview.setText(mMovie.getOverview());
 
-        toolbar.setTitle(movie.getTitle());
+        toolbar.setTitle(mMovie.getTitle());
         setSupportActionBar(toolbar);
         setToolbarText();
 
-        fab.setImageResource(mDetailViewModel.getFavoriteIcon(mMovie));
-        fab.setOnClickListener(view -> {
-            mDetailViewModel.toggleFavoriteStatus(mMovie);
-            ((FloatingActionButton) view).setImageResource(
-                    mDetailViewModel.getFavoriteIcon(mMovie));
-        });
+        fab.setOnClickListener(view -> mDetailViewModel.switchFavoriteStatus(mMovie));
     }
 
     private void configureReviewRecyclerView() {

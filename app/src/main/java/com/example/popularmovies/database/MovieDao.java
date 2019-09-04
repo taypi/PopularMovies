@@ -27,5 +27,5 @@ public interface MovieDao {
     void deleteFavoriteMovie(Movie movie);
 
     @Query("SELECT * FROM favorite_movie WHERE id = :id")
-    Movie getFavoriteById(int id);
+    Movie findById(int id);
 }

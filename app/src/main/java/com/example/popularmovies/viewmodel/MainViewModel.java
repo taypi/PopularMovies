@@ -59,7 +59,7 @@ public class MainViewModel extends ViewModel implements Repository.ListRequestCa
     public void loadMovies() {
         switch (mCurrentSortType) {
             case FAVORITE:
-                mMovies.postValue(mRepository.getFavoriteMovies());
+                mRepository.requestFavoriteMovies();
                 break;
             case TOP:
                 mRepository.requestTopMovies(this);

@@ -65,14 +65,8 @@ public class Repository {
         });
     }
 
-    public List<Movie> getFavoriteMovies() {
-        List<Movie> movies = new ArrayList<>();
-        try {
-            movies = mExecutor.submit(() -> mDatabase.movieDao().getFavoriteMovies()).get();
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-        return movies;
+    public void requestFavoriteMovies() {
+        mExecutor.submit(() -> favoriteList.postValue(mDatabase.movieDao().getFavoriteMovies()));
     }
 
     public void requestMovieDetails(long id, @NonNull RequestCallbacks callbacks) {
@@ -83,9 +77,9 @@ public class Repository {
         });
     }
 
-    public void toggleFavoriteStatus(@NonNull Movie movie) {
+    public void switchFavoriteStatus(@NonNull Movie movie) {
         mExecutor.submit(() -> {
-            if (mDatabase.movieDao().getFavoriteById(movie.getId()) != null) {
+            if (mDatabase.movieDao().findById(movie.getId()) != null) {
                 mDatabase.movieDao().deleteFavoriteMovie(movie);
             } else {
                 mDatabase.movieDao().insertFavoriteMovie(movie);
@@ -98,7 +92,7 @@ public class Repository {
         Movie favoriteMovie = null;
         try {
             favoriteMovie = mExecutor.submit(
-                    () -> mDatabase.movieDao().getFavoriteById(movie.getId())).get();
+                    () -> mDatabase.movieDao().findById(movie.getId())).get();
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
