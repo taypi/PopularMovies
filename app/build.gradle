@@ -12,10 +12,10 @@ android {
     }
     buildTypes {
         debug {
-            buildConfigField 'String', "ApiKey", '"932ade838ca63f016cd03c3c36943018"'
+            buildConfigField 'String', "ApiKey", PopularMovies_TMDbApiKey
         }
         release {
-            buildConfigField 'String', "ApiKey", '"932ade838ca63f016cd03c3c36943018"'
+            buildConfigField 'String', "ApiKey", PopularMovies_TMDbApiKey
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -43,11 +43,11 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
     implementation "androidx.room:room-runtime:$room_version"
-    annotationProcessor "androidx.room:room-compiler:2.2.1"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
 
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.squareup.retrofit2:retrofit:2.6.1'
-    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
